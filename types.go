@@ -285,7 +285,11 @@ type Invoice struct {
 	TranDate   Date      `json:"tranDate"`
 	TranID     string    `json:"tranId"`
 	Department RecordRef `json:"Department,omitempty"`
-	// Class      RecordRef `json:"Class,omitempty"`
+	Class      RecordRef `json:"Class,omitempty"`
+}
+
+func (i Invoice) MarshalJSON() ([]byte, error) {
+	return omitempty.MarshalJSON(i)
 }
 
 type Customer struct {
