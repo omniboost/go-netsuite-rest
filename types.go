@@ -232,7 +232,7 @@ type Invoice struct {
 	// 	RefName string `json:"refName"`
 	// } `json:"custbody_ste_transaction_type"`
 	CustomForm CustomForm `json:"customForm"`
-	DueDate    Date       `json:"dueDate"`
+	DueDate    Date       `json:"dueDate,omitempty"`
 	Entity     struct {
 		Links   Links  `json:"links,omitempty"`
 		ID      string `json:"id"`
