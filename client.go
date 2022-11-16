@@ -12,8 +12,10 @@ import (
 	"net/http/httputil"
 	"net/url"
 	"path"
+	"strconv"
 	"strings"
 	"text/template"
+	"time"
 
 	"github.com/pkg/errors"
 )
@@ -30,7 +32,7 @@ var (
 )
 
 // NewClient returns a new Exact Globe Client client
-func NewClient(httpClient *http.Client, companyID string) *Client {
+func NewClient(httpClient *http.Client) *Client {
 	if httpClient == nil {
 		httpClient = http.DefaultClient
 	}
@@ -38,7 +40,6 @@ func NewClient(httpClient *http.Client, companyID string) *Client {
 	client := &Client{}
 
 	client.SetHTTPClient(httpClient)
-	client.SetCompanyID(companyID)
 	client.SetBaseURL(BaseURL)
 	client.SetDebug(false)
 	client.SetUserAgent(userAgent)
@@ -59,6 +60,14 @@ type Client struct {
 	// credentials
 	companyID       string
 	contentLanguage string
+
+	// token based auth credentials
+	useTokenAuth bool
+	clientID     string
+	clientSecret string
+	tokenID      string
+	tokenSecret  string
+	// accountID    string
 
 	// User agent for client
 	userAgent string
@@ -96,6 +105,54 @@ func (c Client) CompanyID() string {
 func (c *Client) SetCompanyID(companyID string) {
 	c.companyID = companyID
 }
+
+func (c Client) UseTokenAuth() bool {
+	return c.useTokenAuth
+}
+
+func (c *Client) SetUseTokenAuth(useTokenAuth bool) {
+	c.useTokenAuth = useTokenAuth
+}
+
+func (c Client) ClientID() string {
+	return c.clientID
+}
+
+func (c *Client) SetClientID(clientID string) {
+	c.clientID = clientID
+}
+
+func (c Client) ClientSecret() string {
+	return c.clientSecret
+}
+
+func (c *Client) SetClientSecret(clientSecret string) {
+	c.clientSecret = clientSecret
+}
+
+func (c Client) TokenID() string {
+	return c.tokenID
+}
+
+func (c *Client) SetTokenID(tokenID string) {
+	c.tokenID = tokenID
+}
+
+func (c Client) TokenSecret() string {
+	return c.tokenSecret
+}
+
+func (c *Client) SetTokenSecret(tokenSecret string) {
+	c.tokenSecret = tokenSecret
+}
+
+// func (c Client) AccountID() string {
+// 	return c.accountID
+// }
+
+// func (c *Client) SetAccountID(accountID string) {
+// 	c.accountID = accountID
+// }
 
 func (c Client) ContentLanguage() string {
 	return c.contentLanguage
@@ -233,7 +290,53 @@ func (c *Client) NewRequest(ctx context.Context, req Request) (*http.Request, er
 		r.Header.Add("Content-Language", c.ContentLanguage())
 	}
 
+	if c.UseTokenAuth() {
+		headerValue, err := c.TokenBasedAuthorizationHeader(r)
+		log.Println("header:", headerValue)
+		if err != nil {
+			return r, errors.WithStack(err)
+		}
+		r.Header.Add("Authorization", headerValue)
+	}
+
 	return r, nil
+}
+
+func (c *Client) TokenBasedAuthorizationHeader(r *http.Request) (string, error) {
+	g := c.NewSignatureGenerator(r)
+	signature, err := g.Generate()
+	if err != nil {
+		return "", err
+	}
+
+	// OAuth realm="6239966_SB1",
+	// oauth_consumer_key="f09493ec1004a7a790738bd2cce1e20686910fd7cbb06687e0d67f9b3ce5d7d3",
+	// oauth_token="430b4153e2b43b979ef93ee0be33d89c2a58024743007d045b588d8b1abbf78a",
+	// oauth_signature_method="HMAC-SHA256",
+	// oauth_timestamp="1668528724",
+	// oauth_nonce="85891668386",
+	// oauth_version="1.0",
+	// oauth_signature="Ds2fEBHxyJvL6OXavV8rrHaMJUyDZi%2By0%2Bu8b%2B1%2Fik8%3D"
+	// OAuth realm="6239966_SB1", oauth_token="430b4153e2b43b979ef93ee0be33d89c2a58024743007d045b588d8b1abbf78a", oauth_consumer_key="f09493ec1004a7a790738bd2cce1e20686910fd7cbb06687e0d67f9b3ce5d7d3", oauth_nonce="85891668386", oauth_timestamp="1668528724", oauth_signature_method="HMAC-SHA256", oauth_version="1.0", oauth_signature="Ds2fEBHxyJvL6OXavV8rrHaMJUyDZi%2By0%2Bu8b%2B1%2Fik8%3D"
+
+	return strings.Replace(fmt.Sprintf(`OAuth realm="%s",
+oauth_consumer_key="%s",
+oauth_token="%s",
+oauth_signature_method="%s",
+oauth_timestamp="%s",
+oauth_nonce="%s",
+oauth_version="%s",
+oauth_signature="%s"`,
+			g.AccountID,                    // realm
+			g.ClientID,                     // oauth_consumer key
+			g.TokenID,                      // oauth_token
+			g.SignatureMethod.String(),     // oauth_signature_method
+			strconv.Itoa(int(g.Timestamp)), // timestamp
+			g.Nonce,                        // oauth_nonce
+			g.Version,                      // oauth_version
+			url.QueryEscape(signature),     // oauth_signature
+		), "\n", "", -1),
+		nil
 }
 
 // Do sends an Client request and returns the Client response. The Client response is json decoded and stored in the value
@@ -445,4 +548,35 @@ func checkContentType(response *http.Response) error {
 	}
 
 	return nil
+}
+
+func (c *Client) NewSignatureGenerator(r *http.Request) *SignatureGenerator {
+	return &SignatureGenerator{
+		SignatureMethod:   HMACSHA256,
+		BaseURL:           r.URL.String(),
+		HTTPRequestMethod: r.Method,
+		ClientID:          c.ClientID(),
+		ClientSecret:      c.ClientSecret(),
+		TokenID:           c.TokenID(),
+		TokenSecret:       c.TokenSecret(),
+		AccountID:         strings.Replace(c.CompanyID(), "-", "_", -1),
+		Nonce:             GenerateNonce(),
+		// Nonce:   "35878027199",
+		Version:   "1.0",
+		Timestamp: time.Now().Unix(),
+		// Timestamp: 1668529334,
+	}
+	// return &SignatureGenerator{
+	// 	SignatureMethod:   HMACSHA256,
+	// 	BaseURL:           "https://1234567.restlets.api.netsuite.com/rest/accesstoken",
+	// 	HTTPRequestMethod: "POST",
+	// 	ClientID:          "60712990bc09623786e7047c226bcb3f86d49dca0b04efc21001dc76d97a81f5",
+	// 	ClientSecret:      "60712990bc09623786e7047c226bcb3f86d49dca0b04efc21001dc76d97a81f5",
+	// 	TokenID:           "447d0cba5569a2d616e32a537110bc8c10ebcf42cc1fa34d6f76d08531abc179",
+	// 	TokenSecret:       "447d0cba5569a2d616e32a537110bc8c10ebcf42cc1fa34d6f76d08531abc179",
+	// 	AccountID:         "1234567",
+	// 	Nonce:             "wjRgXQPWhYtKl0A7bO8Z",
+	// 	Version:           "1.0",
+	// 	Timestamp:         1576079512,
+	// }
 }
