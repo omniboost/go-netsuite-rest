@@ -290,15 +290,6 @@ func (c *Client) NewRequest(ctx context.Context, req Request) (*http.Request, er
 		r.Header.Add("Content-Language", c.ContentLanguage())
 	}
 
-	if c.UseTokenAuth() {
-		headerValue, err := c.TokenBasedAuthorizationHeader(r)
-		log.Println("header:", headerValue)
-		if err != nil {
-			return r, errors.WithStack(err)
-		}
-		r.Header.Add("Authorization", headerValue)
-	}
-
 	return r, nil
 }
 
@@ -308,16 +299,6 @@ func (c *Client) TokenBasedAuthorizationHeader(r *http.Request) (string, error) 
 	if err != nil {
 		return "", err
 	}
-
-	// OAuth realm="6239966_SB1",
-	// oauth_consumer_key="f09493ec1004a7a790738bd2cce1e20686910fd7cbb06687e0d67f9b3ce5d7d3",
-	// oauth_token="430b4153e2b43b979ef93ee0be33d89c2a58024743007d045b588d8b1abbf78a",
-	// oauth_signature_method="HMAC-SHA256",
-	// oauth_timestamp="1668528724",
-	// oauth_nonce="85891668386",
-	// oauth_version="1.0",
-	// oauth_signature="Ds2fEBHxyJvL6OXavV8rrHaMJUyDZi%2By0%2Bu8b%2B1%2Fik8%3D"
-	// OAuth realm="6239966_SB1", oauth_token="430b4153e2b43b979ef93ee0be33d89c2a58024743007d045b588d8b1abbf78a", oauth_consumer_key="f09493ec1004a7a790738bd2cce1e20686910fd7cbb06687e0d67f9b3ce5d7d3", oauth_nonce="85891668386", oauth_timestamp="1668528724", oauth_signature_method="HMAC-SHA256", oauth_version="1.0", oauth_signature="Ds2fEBHxyJvL6OXavV8rrHaMJUyDZi%2By0%2Bu8b%2B1%2Fik8%3D"
 
 	return strings.Replace(fmt.Sprintf(`OAuth realm="%s",
 oauth_consumer_key="%s",
@@ -343,6 +324,14 @@ oauth_signature="%s"`,
 // pointed to by v, or returned as an error if an Client error has occurred. If v implements the io.Writer interface,
 // the raw response will be written to v, without attempting to decode it.
 func (c *Client) Do(req *http.Request, body interface{}) (*http.Response, error) {
+	if c.UseTokenAuth() {
+		headerValue, err := c.TokenBasedAuthorizationHeader(req)
+		if err != nil {
+			return nil, errors.WithStack(err)
+		}
+		req.Header.Add("Authorization", headerValue)
+	}
+
 	if c.beforeRequestDo != nil {
 		c.beforeRequestDo(c.http, req, body)
 	}
@@ -551,6 +540,9 @@ func checkContentType(response *http.Response) error {
 }
 
 func (c *Client) NewSignatureGenerator(r *http.Request) *SignatureGenerator {
+	// u := r.URL
+	// u.RawQuery = ""
+
 	return &SignatureGenerator{
 		SignatureMethod:   HMACSHA256,
 		BaseURL:           r.URL.String(),
@@ -561,22 +553,20 @@ func (c *Client) NewSignatureGenerator(r *http.Request) *SignatureGenerator {
 		TokenSecret:       c.TokenSecret(),
 		AccountID:         strings.Replace(c.CompanyID(), "-", "_", -1),
 		Nonce:             GenerateNonce(),
-		// Nonce:   "35878027199",
-		Version:   "1.0",
-		Timestamp: time.Now().Unix(),
-		// Timestamp: 1668529334,
+		Version:           "1.0",
+		Timestamp:         time.Now().Unix(),
 	}
 	// return &SignatureGenerator{
 	// 	SignatureMethod:   HMACSHA256,
-	// 	BaseURL:           "https://1234567.restlets.api.netsuite.com/rest/accesstoken",
+	// 	BaseURL:           "https://123456.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=6&deploy=1&customParam=someValue&testParam=someOtherValue",
 	// 	HTTPRequestMethod: "POST",
-	// 	ClientID:          "60712990bc09623786e7047c226bcb3f86d49dca0b04efc21001dc76d97a81f5",
-	// 	ClientSecret:      "60712990bc09623786e7047c226bcb3f86d49dca0b04efc21001dc76d97a81f5",
-	// 	TokenID:           "447d0cba5569a2d616e32a537110bc8c10ebcf42cc1fa34d6f76d08531abc179",
-	// 	TokenSecret:       "447d0cba5569a2d616e32a537110bc8c10ebcf42cc1fa34d6f76d08531abc179",
-	// 	AccountID:         "1234567",
-	// 	Nonce:             "wjRgXQPWhYtKl0A7bO8Z",
+	// 	ClientID:          "ef40afdd8abaac111b13825dd5e5e2ddddb44f86d5a0dd6dcf38c20aae6b67e4",
+	// 	ClientSecret:      "d26ad321a4b2f23b0741c8d38392ce01c3e23e109df6c96eac6d099e9ab9e8b5",
+	// 	TokenID:           "2b0ce516420110bcbd36b69e99196d1b7f6de3c6234c5afb799b73d87569f5cc",
+	// 	TokenSecret:       "c29a677df7d5439a458c063654187e3d678d73aca8e3c9d8bea1478a3eb0d295",
+	// 	AccountID:         "123456",
+	// 	Nonce:             "fjaLirsIcCGVZWzBX0pg",
 	// 	Version:           "1.0",
-	// 	Timestamp:         1576079512,
+	// 	Timestamp:         1508242306,
 	// }
 }

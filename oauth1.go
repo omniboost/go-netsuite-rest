@@ -5,9 +5,7 @@ import (
 	"crypto/sha1"
 	"crypto/sha256"
 	"encoding/base64"
-	"fmt"
 	"hash"
-	"log"
 	"math/rand"
 	"net/url"
 	"strconv"
@@ -82,28 +80,33 @@ type SignatureGenerator struct {
 // http://tools.ietf.org/html/rfc5849#section-3.4 for more information about
 // signatures.
 func (g *SignatureGenerator) Generate() (string, error) {
-	requestParameters := []string{
-		fmt.Sprintf("oauth_consumer_key=%s", g.ClientID),
-		fmt.Sprintf("oauth_nonce=%s", g.Nonce),
-		fmt.Sprintf("oauth_signature_method=%s", g.SignatureMethod.String()),
-		fmt.Sprintf("oauth_timestamp=%s", strconv.Itoa(int(g.Timestamp))),
-		fmt.Sprintf("oauth_token=%s", g.TokenID),
-		fmt.Sprintf("oauth_version=%s", g.Version),
+	u, err := url.Parse(g.BaseURL)
+	if err != nil {
+		return "", err
 	}
 
-	for _, v := range requestParameters {
-		log.Println(v)
+	baseURL, err := url.Parse(g.BaseURL)
+	if err != nil {
+		return "", err
 	}
+	baseURL.RawQuery = ""
+
+	requestParameters := u.Query()
+	requestParameters.Add("oauth_consumer_key", g.ClientID)
+	requestParameters.Add("oauth_nonce", g.Nonce)
+	requestParameters.Add("oauth_signature_method", g.SignatureMethod.String())
+	requestParameters.Add("oauth_timestamp", strconv.Itoa(int(g.Timestamp)))
+	requestParameters.Add("oauth_token", g.TokenID)
+	requestParameters.Add("oauth_version", g.Version)
 
 	// for i, v := range requestParameters {
 	// 	requestParameters[i] = url.QueryEscape(v)
 	// }
-	normalizedRequestParameters := strings.Join(requestParameters, "&")
 
 	dataPieces := []string{
-		g.HTTPRequestMethod,         // http-request-method
-		g.BaseURL,                   // base-string-uri
-		normalizedRequestParameters, // normalized-request-parameters
+		g.HTTPRequestMethod,        // http-request-method
+		baseURL.String(),           // base-string-uri
+		requestParameters.Encode(), // normalized-request-parameters
 	}
 
 	for i, v := range dataPieces {
@@ -111,16 +114,10 @@ func (g *SignatureGenerator) Generate() (string, error) {
 	}
 
 	data := strings.Join(dataPieces, "&")
-	for _, v := range dataPieces {
-		log.Println(v)
-	}
-	log.Println("data:", data)
 	key := g.ClientSecret + "&" + g.TokenSecret
-	log.Println("key:", key)
 
 	var (
 		signature string
-		err       error
 	)
 
 	switch g.SignatureMethod {
