@@ -8,7 +8,7 @@ import (
 
 func TestCustom(t *testing.T) {
 	req := client.NewCustomRequest()
-	client.SetBaseURL("https://5325833-sb2.restlets.api.netsuite.com")
+	client.SetBaseURL("https://5325833-sb2.restlets.api.netsuite.com/app/site/hosting/restlet.nl")
 	req.SetMethod("POST")
 	req.QueryParams().Script = 1357
 	req.QueryParams().Deploy = 1

@@ -109,7 +109,7 @@ func (r *CustomRequest) NewResponseBody() *CustomResponseBody {
 type CustomResponseBody interface{}
 
 func (r *CustomRequest) URL() (*url.URL, error) {
-	u, err := r.client.GetEndpointURL("/app/site/hosting/restlet.nl", r.PathParams())
+	u, err := r.client.GetEndpointURL("", r.PathParams())
 	return &u, err
 }
 
