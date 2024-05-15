@@ -80,3 +80,23 @@ func TestSuiteqlPostAddresses(t *testing.T) {
 
 	log.Fatalf("%+v", customers[1])
 }
+
+func TestSuiteqlPostLocations(t *testing.T) {
+	req := client.NewSuiteqlPostRequest()
+	req.QueryParams().Limit = 100
+	req.RequestBody().Q = "SELECT * FROM location"
+	resp, err := req.Do()
+	if err != nil {
+		t.Error(err)
+	}
+
+	// b, _ := json.MarshalIndent(resp, "", "  ")
+	// fmt.Println(string(b))
+
+	customers, err := resp.ToLocations(client)
+	if err != nil {
+		t.Error(err)
+	}
+
+	log.Fatalf("%+v", customers[1])
+}

@@ -171,6 +171,18 @@ func (r *SuiteqlPostResponseBody) ToAddresses(client *Client) (Addresses, error)
 	return items, err
 }
 
+func (r *SuiteqlPostResponseBody) ToLocations(client *Client) (Locations, error) {
+	items := Locations{}
+
+	reader := bytes.NewReader(r.Items)
+	dec := json.NewDecoder(reader)
+	if client.disallowUnknownFields {
+		dec.DisallowUnknownFields()
+	}
+	err := dec.Decode(&items)
+	return items, err
+}
+
 func (r *SuiteqlPostRequest) URL() (*url.URL, error) {
 	u, err := r.client.GetEndpointURL("/query/v1/suiteql", r.PathParams())
 	return &u, err

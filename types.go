@@ -611,3 +611,18 @@ type Address struct {
 	Zip                      string `json:"zip"`
 	Addressee                string `json:"addressee,omitempty"`
 }
+
+type Locations []Location
+
+type Location struct {
+	Links                  []interface{} `json:"links"`
+	Fullname               string        `json:"fullname"`
+	ID                     string        `json:"id"`
+	Isinactive             string        `json:"isinactive"`
+	Lastmodifieddate       string        `json:"lastmodifieddate"`
+	Mainaddress            string        `json:"mainaddress"`
+	Makeinventoryavailable string        `json:"makeinventoryavailable"`
+	Name                   string        `json:"name"`
+	Subsidiary             string        `json:"subsidiary"`
+	Externalid             string        `json:"externalid,omitempty"`
+}
