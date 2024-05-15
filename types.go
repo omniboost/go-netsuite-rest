@@ -292,6 +292,8 @@ func (i Invoice) MarshalJSON() ([]byte, error) {
 	return omitempty.MarshalJSON(i)
 }
 
+type Customers []Customer
+
 type Customer struct {
 	AddressBook struct {
 		Links        Links     `json:"links"`

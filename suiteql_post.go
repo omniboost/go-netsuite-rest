@@ -123,8 +123,8 @@ type SuiteqlPostResponseBody struct {
 	TotalResults int             `json:"totalResults"`
 }
 
-func (r SuiteqlPostResponseBody) ToCustomers(client *Client) ([]Customer, error) {
-	items := []Customer{}
+func (r SuiteqlPostResponseBody) ToCustomers(client *Client) (Customers, error) {
+	items := Customers{}
 
 	reader := bytes.NewReader(r.Items)
 	dec := json.NewDecoder(reader)
