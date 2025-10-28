@@ -603,8 +603,8 @@ type InvoiceItemItem struct {
 	// 	} `json:"inventoryassignment"`
 	// } `json:"inventoryDetail"`
 	Item        InvoiceItemItemItem `json:"item"`
-	ItemSubType string              `json:"itemSubType"`
-	ItemType    string              `json:"itemType"`
+	ItemSubType SubType             `json:"itemSubType"`
+	ItemType    Type                `json:"itemType"`
 	// Line        int                 `json:"line"`
 	// Marginal Bool `json:"marginal"`
 	// Price struct {
@@ -619,6 +619,16 @@ type InvoiceItemItem struct {
 	// Units               string  `json:"units"`
 	// CustCol2 string `json:"custcol2"`
 	// CustCol3 string `json:"custcol3"`
+}
+
+type SubType struct {
+	ID      string `json:"id"`
+	RefName string `json:"refName,omitempty"`
+}
+
+type Type struct {
+	ID      string `json:"id"`
+	RefName string `json:"refName,omitempty"`
 }
 
 type InvoiceTaxDetails struct {
@@ -647,7 +657,7 @@ type InvoiceTaxDetails struct {
 
 type InvoiceItemItemItem struct {
 	// Links   Links  `json:"links"`
-	ID      int    `json:"id"`
+	ID      string `json:"id"`
 	RefName string `json:"refName"`
 }
 
