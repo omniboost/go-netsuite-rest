@@ -8,6 +8,8 @@ import (
 
 func TestCustomersGet(t *testing.T) {
 	req := client.NewCustomersGetRequest()
+	req.QueryParams().Limit = 10
+	req.QueryParams().Offset = 10
 	// req.QueryParams().Q = "id BETWEEN_NOT [1, 42]"
 	// req.QueryParams().Q = "email START_WITH kees@omniboost"
 	req.QueryParams().Q = "subsidiary = 46"

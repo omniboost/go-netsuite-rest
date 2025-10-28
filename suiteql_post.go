@@ -183,6 +183,30 @@ func (r *SuiteqlPostResponseBody) ToLocations(client *Client) (Locations, error)
 	return items, err
 }
 
+func (r *SuiteqlPostResponseBody) ToCreditMemoTransactions(client *Client) (CreditMemoTransactions, error) {
+	items := CreditMemoTransactions{}
+
+	reader := bytes.NewReader(r.Items)
+	dec := json.NewDecoder(reader)
+	if client.disallowUnknownFields {
+		dec.DisallowUnknownFields()
+	}
+	err := dec.Decode(&items)
+	return items, err
+}
+
+func (r *SuiteqlPostResponseBody) ToInvoiceTransactions(client *Client) (InvoiceTransactions, error) {
+	items := InvoiceTransactions{}
+
+	reader := bytes.NewReader(r.Items)
+	dec := json.NewDecoder(reader)
+	if client.disallowUnknownFields {
+		dec.DisallowUnknownFields()
+	}
+	err := dec.Decode(&items)
+	return items, err
+}
+
 func (r *SuiteqlPostRequest) URL() (*url.URL, error) {
 	u, err := r.client.GetEndpointURL("/query/v1/suiteql", r.PathParams())
 	return &u, err

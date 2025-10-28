@@ -98,15 +98,14 @@ func (g *SignatureGenerator) Generate() (string, error) {
 	requestParameters.Add("oauth_timestamp", strconv.Itoa(int(g.Timestamp)))
 	requestParameters.Add("oauth_token", g.TokenID)
 	requestParameters.Add("oauth_version", g.Version)
-
 	// for i, v := range requestParameters {
 	// 	requestParameters[i] = url.QueryEscape(v)
 	// }
 
 	dataPieces := []string{
-		g.HTTPRequestMethod,        // http-request-method
-		baseURL.String(),           // base-string-uri
-		requestParameters.Encode(), // normalized-request-parameters
+		g.HTTPRequestMethod, // http-request-method
+		baseURL.String(),    // base-string-uri
+		strings.ReplaceAll(requestParameters.Encode(), "+", "%20"), // normalized-request-parameters
 	}
 
 	for i, v := range dataPieces {
