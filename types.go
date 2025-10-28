@@ -16,7 +16,7 @@ type JournalEntry struct {
 	CreatedFrom            NSResource       `json:"createdFrom,omitzero"`
 	Currency               Currency         `json:"currency,omitzero"`
 	CustomForm             CustomForm       `json:"customForm,omitzero"`
-	Department             Department       `json:"Department,omitzero"`
+	Department             Department       `json:"department,omitzero"`
 	ExchangeRate           float64          `json:"exchangeRate,omitempty"`
 	ExcludeFromGLNumbering bool             `json:"excludeFromGLNumbering,omitempty"`
 	ExternalID             string           `json:"externalId,omitempty"`
