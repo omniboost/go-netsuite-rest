@@ -195,6 +195,18 @@ func (r *SuiteqlPostResponseBody) ToCreditMemoTransactions(client *Client) (Cred
 	return items, err
 }
 
+func (r SuiteqlPostResponseBody) ToSalesTaxItems(client *Client) (SalesTaxItems, error) {
+	items := SalesTaxItems{}
+
+	reader := bytes.NewReader(r.Items)
+	dec := json.NewDecoder(reader)
+	if client.disallowUnknownFields {
+		dec.DisallowUnknownFields()
+	}
+	err := dec.Decode(&items)
+	return items, err
+}
+
 func (r *SuiteqlPostResponseBody) ToInvoiceTransactions(client *Client) (InvoiceTransactions, error) {
 	items := InvoiceTransactions{}
 
@@ -205,6 +217,18 @@ func (r *SuiteqlPostResponseBody) ToInvoiceTransactions(client *Client) (Invoice
 	}
 	err := dec.Decode(&items)
 	return items, err
+}
+
+func (r SuiteqlPostResponseBody) ToNexuses(client *Client) (SQLNexuses, error) {
+	nexuses := SQLNexuses{}
+
+	reader := bytes.NewReader(r.Items)
+	dec := json.NewDecoder(reader)
+	if client.disallowUnknownFields {
+		dec.DisallowUnknownFields()
+	}
+	err := dec.Decode(&nexuses)
+	return nexuses, err
 }
 
 func (r *SuiteqlPostRequest) URL() (*url.URL, error) {

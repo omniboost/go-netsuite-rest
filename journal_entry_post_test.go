@@ -11,7 +11,7 @@ import (
 func TestJournalEntryPost(t *testing.T) {
 	req := client.NewJournalEntryPostRequest()
 	req.RequestBody().Subsidiary.ID = "3"
-	req.RequestBody().Lines = netsuite.JournalEntryLine{
+	req.RequestBody().Line = netsuite.JournalEntryLine{
 		Items: netsuite.JournalEntryLineElements{
 			{
 				Account: netsuite.Account{

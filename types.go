@@ -6,69 +6,63 @@ import (
 )
 
 type JournalEntry struct {
-	AccountingBook AccountingBook `json:"accountingBook,omitempty"`
-	Approved       Bool           `json:"approved"`
-	CreatedDate    Date           `json:"createdDate,omitempty"`
-	Currency       Currency       `json:"currency,omitempty"`
-	// CustbodyAdjustmentJournal      Bool `json:"custbody_adjustment_journal,omitempty"`
-	// CustbodyCashRegister           Bool `json:"custbody_cash_register,omitempty"`
-	// CustbodyFfBrExcludeTransaction Bool `json:"custbody_ff_br_exclude_transaction,omitempty"`
-	// CustbodyNondeductibleRefTran   struct {
-	// 	Links        Links         `json:"links"`
-	// 	Count        int           `json:"count"`
-	// 	HasMore      Bool          `json:"hasMore"`
-	// 	Items        []interface{} `json:"items"`
-	// 	Offset       int           `json:"offset"`
-	// 	TotalResults int           `json:"totalResults"`
-	// } `json:"custbody_nondeductible_ref_tran,omitempty"`
-	// CustbodyNstsGawClkTrigApprove Bool `json:"custbody_nsts_gaw_clk_trig_approve"`
-	// CustbodyNstsGawClkTrigReject  Bool `json:"custbody_nsts_gaw_clk_trig_reject"`
-	// CustbodyNstsGawClkTrigSubmit  Bool `json:"custbody_nsts_gaw_clk_trig_submit"`
-	// CustbodyNstsGawCreatedBy      struct {
-	// 	Links   Links  `json:"links"`
-	// 	ID      string `json:"id"`
-	// 	RefName string `json:"refName"`
-	// } `json:"custbody_nsts_gaw_created_by"`
-	// CustbodyNstsGawIsDelegated   Bool `json:"custbody_nsts_gaw_is_delegated"`
-	// CustbodyNstsGawNextApprovers struct {
-	// 	Links        Links         `json:"links"`
-	// 	Count        int           `json:"count"`
-	// 	HasMore      Bool          `json:"hasMore"`
-	// 	Items        []interface{} `json:"items"`
-	// 	Offset       int           `json:"offset"`
-	// 	TotalResults int           `json:"totalResults"`
-	// } `json:"custbody_nsts_gaw_next_approvers"`
-	// CustbodyNstsGawSuperappApproved Bool   `json:"custbody_nsts_gaw_superapp_approved"`
-	// CustbodyNstsGawTriggerSuper     Bool   `json:"custbody_nsts_gaw_trigger_super"`
-	// CustbodyReportTimestamp         string `json:"custbody_report_timestamp"`
-	// CustbodySiiArticle61D           Bool   `json:"custbody_sii_article_61d"`
-	// CustbodySiiArticle7273          Bool   `json:"custbody_sii_article_72_73"`
-	// CustbodySiiNotReportedInTime    Bool   `json:"custbody_sii_not_reported_in_time"`
-	// CustbodyVatrepTaxperiodTrn      string `json:"custbody_vatrep_taxperiod_trn"`
-	// CustbodyVatrepTrnenabled        Bool   `json:"custbody_vatrep_trnenabled"`
-	CustomForm             CustomForm `json:"customForm,omitempty"`
-	ExchangeRate           float64    `json:"exchangeRate,omitempty"`
-	ExcludeFromGLNumbering Bool       `json:"excludeFromGLNumbering,omitempty"`
-	ID                     string     `json:"id,omitempty"`
-	IsReversal             Bool       `json:"isReversal,omitempty"`
-	// LastModifiedDate       Date             `json:"lastModifiedDate,omitempty"`
-	Lines         JournalEntryLine `json:"line"`
-	Memo          string           `json:"memo"`
-	PostingPeriod PostingPeriod    `json:"postingPeriod,omitempty"`
-	RefName       string           `json:"refName,omitempty"`
-	ReversalDefer Bool             `json:"reversalDefer,omitempty"`
-	Subsidiary    Subsidiary       `json:"subsidiary,omitempty"`
-	TranDate      Date             `json:"tranDate,omitempty"`
-	TranID        string           `json:"tranId,omitempty"`
-	Void          Bool             `json:"void,omitempty"`
-	// CustBody4              string           `json:"custbody4"`
+	AccountingBook NSResource `json:"accountingBook,omitzero"`
+	// AccountingBookDetail AccountingBookDetail `json:"accountingBookDetail,omitzero"`
+	// AppliedRules AppliedRules `json:"appliedRules,omitzero"`
+	ApprovalStatus         RecordRef        `json:"approvalStatus,omitzero"`
+	Approved               bool             `json:"approved"`
+	Class                  Classification   `json:"Class,omitzero"`
+	CreatedDate            Date             `json:"createdDate,omitzero"`
+	CreatedFrom            NSResource       `json:"createdFrom,omitzero"`
+	Currency               Currency         `json:"currency,omitzero"`
+	CustomForm             CustomForm       `json:"customForm,omitzero"`
+	Department             Department       `json:"Department,omitzero"`
+	ExchangeRate           float64          `json:"exchangeRate,omitempty"`
+	ExcludeFromGLNumbering bool             `json:"excludeFromGLNumbering,omitempty"`
+	ExternalID             string           `json:"externalId,omitempty"`
+	ID                     string           `json:"id,omitempty"`
+	IsReversal             bool             `json:"isReversal,omitempty"`
+	LastModifiedDate       Date             `json:"lastModifiedDate,omitzero"`
+	Line                   JournalEntryLine `json:"line"`
+	Location               Location         `json:"location,omitzero"`
+	Memo                   string           `json:"memo"`
+	// NextApprover           Employee         `json:"nextApprover,omitzero"`
+	Nexus                Nexus            `json:"nexus,omitzero"`
+	ParentExpenseAlloc   NSResource       `json:"parentExpenseAlloc,omitzero"`
+	PostingPeriod        AccountingPeriod `json:"postingPeriod,omitzero"`
+	RefName              string           `json:"refName,omitempty"`
+	ReversalDate         Date             `json:"reversalDate,omitzero"`
+	ReversalDefer        bool             `json:"reversalDefer,omitempty"`
+	Subsidiary           Subsidiary       `json:"subsidiary,omitzero"`
+	SubsidiaryTaxRegNum  string           `json:"subsidiaryTaxRegNum,omitempty"`
+	TaxDetailsOverride   bool             `json:"taxDetailsOverride,omitempty"`
+	TaxPointDate         Date             `json:"taxPointDate,omitzero"`
+	TaxPointDateOverride bool             `json:"taxPointDateOverride,omitempty"`
+	TaxRegOverride       bool             `json:"taxRegOverride,omitempty"`
+	ToSubsidiary         Subsidiary       `json:"toSubsidiary,omitzero"`
+	TranDate             Date             `json:"tranDate,omitzero"`
+	TranID               string           `json:"tranId,omitempty"`
+	Void                 bool             `json:"void,omitempty"`
+
+	// CustomFields map[string]NSResource `json:"customFields,omitempty"`
 }
 
-func (j JournalEntry) MarshalJSON() ([]byte, error) {
-	return omitempty.MarshalJSON(j)
-}
+// func (j JournalEntry) MarshalJSON() ([]byte, error) {
+// 	// TODO: implement marshalling of cust bodies & cols
+// 	return omitempty.MarshalJSON(j)
+// }
 
-func (j JournalEntry) IsEmpty() bool {
+// func (j *JournalEntry) UnmarshalJSON(data []byte) error {
+// 	data, err := UnmarshalCustomFields(data, j.CustomFields)
+// 	if err != nil {
+// 		return err
+// 	}
+//
+// 	type Alias JournalEntry
+// 	return json.Unmarshal(data, (*Alias)(j))
+// }
+
+func (j JournalEntry) IsZero() bool {
 	return zero.IsZero(j)
 }
 
@@ -84,19 +78,21 @@ type Currency struct {
 	RefName string `json:"refName"`
 }
 
-func (c Currency) IsEmpty() bool {
+func (c Currency) IsZero() bool {
 	return zero.IsZero(c)
 }
 
-type PostingPeriod struct {
+type AccountingPeriod struct {
 	Links   Links  `json:"links"`
 	ID      string `json:"id"`
 	RefName string `json:"refName"`
 }
 
-func (p PostingPeriod) IsEmpty() bool {
+func (p AccountingPeriod) IsZero() bool {
 	return zero.IsZero(p)
 }
+
+type Subsidiaries []Subsidiary
 
 type Subsidiary struct {
 	Links   Links  `json:"links,omitempty"`
@@ -104,18 +100,8 @@ type Subsidiary struct {
 	RefName string `json:"refName,omitempty"`
 }
 
-func (s Subsidiary) IsEmpty() bool {
+func (s Subsidiary) IsZero() bool {
 	return zero.IsZero(s)
-}
-
-type AccountingBook struct {
-	Links   Links  `json:"links,omitempty"`
-	ID      string `json:"id,omitempty"`
-	RefName string `json:"refName,omitempty"`
-}
-
-func (a AccountingBook) IsEmpty() bool {
-	return zero.IsZero(a)
 }
 
 type CustomForm struct {
@@ -123,29 +109,45 @@ type CustomForm struct {
 	RefName string `json:"refName"`
 }
 
-func (c CustomForm) IsEmpty() bool {
+func (c CustomForm) IsZero() bool {
 	return zero.IsZero(c)
 }
 
 type JournalEntryLineElements []JournalEntryLineElement
 
 type JournalEntryLineElement struct {
-	Links               Links     `json:"links,omitempty"`
-	Account             Account   `json:"Account,omitempty"`
-	Cleared             Bool      `json:"cleared,omitempty"`
-	Credit              float64   `json:"credit,omitempty"`
-	Custcol2663Isperson Bool      `json:"custcol_2663_isperson,omitempty"`
-	Eliminate           Bool      `json:"eliminate,omitempty"`
-	Line                int       `json:"line,omitempty"`
-	Debit               float64   `json:"debit,omitempty"`
-	Memo                string    `json:"memo"`
-	Department          RecordRef `json:"Department,omitempty"`
-	Class               RecordRef `json:"Class,omitempty"`
-	CustCol1            string    `json:"custcol1,omitempty"`
-	CustCol2            string    `json:"custcol2,omitempty"`
-	CustCol3            string    `json:"custcol3,omitempty"`
-	CustCol4            string    `json:"custcol4,omitempty"`
-	CustCol5            string    `json:"custcol5,omitempty"`
+	Account                Account    `json:"account,omitzero"`
+	Class                  RecordRef  `json:"class,omitzero"`
+	Cleared                Bool       `json:"cleared,omitzero"`
+	ClearedDate            Date       `json:"clearedDate,omitzero"`
+	Credit                 float64    `json:"credit,omitempty"`
+	CreditTax              float64    `json:"creditTax,omitempty"`
+	Debit                  float64    `json:"debit,omitempty"`
+	DebitTax               float64    `json:"debitTax,omitempty"`
+	Department             RecordRef  `json:"Department,omitzero"`
+	Eliminate              Bool       `json:"eliminate,omitzero"`
+	EndDate                Date       `json:"endDate,omitzero"`
+	Entity                 NSResource `json:"entity,omitzero"`
+	GiftCertCode           NSResource `json:"giftCertCode,omitzero"`
+	Item                   NSResource `json:"item,omitzero"`
+	Line                   int        `json:"line,omitempty"`
+	LineCreatedDate        Date       `json:"lineCreatedDate,omitzero"`
+	LineLastModifiedDate   Date       `json:"lineLastModifiedDate,omitzero"`
+	LineTaxCode            NSResource `json:"lineTaxCode,omitzero"`
+	LineTaxRate            float64    `json:"lineTaxRate,omitempty"`
+	Links                  Links      `json:"links,omitzero"`
+	Location               Location   `json:"location,omitzero"`
+	Memo                   string     `json:"memo"`
+	RefName                string     `json:"refName,omitempty"`
+	Residual               float64    `json:"residual,omitempty"`
+	RevenueRecognitionRule NSResource `json:"revenueRecognitionRule,omitzero"`
+	Schedule               NSResource `json:"schedule,omitzero"`
+	ScheduleNum            NSResource `json:"scheduleNum,omitzero"`
+	ScheduleType           NSResource `json:"scheduleType,omitzero"`
+	StartDate              Date       `json:"startDate,omitzero"`
+	TaxAccount             TaxAccount `json:"taxAccount,omitzero"`
+	TaxBasis               float64    `json:"taxBasis,omitempty"`
+	TotalAmount            float64    `json:"totalAmount,omitempty"`
 }
 
 func (j JournalEntryLineElement) MarshalJSON() ([]byte, error) {
@@ -154,15 +156,124 @@ func (j JournalEntryLineElement) MarshalJSON() ([]byte, error) {
 
 type Accounts []Account
 
+// https://system.netsuite.com/help/helpcenter/en_US/APIs/REST_API_Browser/record/v1/2025.1/index.html#/definitions/account
 type Account struct {
-	Links      Links  `json:"links,omitempty"`
-	ID         string `json:"id,omitempty"`
-	RefName    string `json:"refName,omitempty"`
-	AcctNumber string `json:"acctNumber,omitempty"`
+	AccountContextSearch         AccountContextSearchCollection `json:"accountContextSearch,omitzero"`
+	AccountSearchDisplayName     string                         `json:"accountSearchDisplayName,omitempty"`
+	AccountSearchDisplayNameCopy string                         `json:"accountSearchDisplayNameCopy,omitempty"`
+	// Enter up to 31 characters for an account name that will appear on all
+	// reports. If you want to use GL account numbers and do not see a Number
+	// field above the Name field, go to Setup > Accounting > Preferences >
+	// Accounting Preferences, and check the Use Account Numbers box. Save the
+	// preference, and return to this page.
+	AcctName string `json:"acctName,omitempty"`
+	// Enter the number to identify this account. The number can be alphanumeric. The maximum number of characters is 60.
+	AcctNumber       string     `json:"acctNumber,omitempty"`
+	AcctType         NSResource `json:"acctType,omitzero"`
+	AvailableBalance float64    `json:"availableBalance,omitempty"`
+	// Check this box to signify this is an account used with ACH processing.
+	// ACH processing is used for the Electronic Funds Transfer (EFT) and Direct
+	// Deposit features.
+	BACH                 bool           `json:"bAch,omitzero"`
+	Balance              float64        `json:"balance,omitempty"`
+	BillableExpensesAcct NSResource     `json:"billableExpensesAcct,omitzero"`
+	CashFlowRate         NSResource     `json:"cashFlowRate,omitzero"`
+	Category1099Misc     NSResource     `json:"category1099Misc,omitzero"`
+	Class                Classification `json:"class,omitzero"`
+	// Enter a number to reset the default check number that appears on
+	// transactions such as checks and bill payments. By default, this field
+	// shows the highest check number in the account plus one. The number you
+	// enter in the Next Check Number field of the account record determines the
+	// number that appears in the Check Number field on transactions linked to
+	// that account.
+	CurDocNum    int64      `json:"curDocNum,omitempty"`
+	Currency     Currency   `json:"currency,omitzero"`
+	DeferralAcct NSResource `json:"deferralAcct,omitzero"`
+	Department   Department `json:"department,omitzero"`
+	// Enter a description for this account.
+	Description              string `json:"description,omitempty"`
+	DisplayNameWithHierarchy string `json:"displayNameWithHierarchy,omitempty"`
+	// Check this box to make this account an intercompany account. Intercompany
+	// accounts are used to record transactions between subsidiaries. You can
+	// post both intercompany transactions and non-intercompany transactions to
+	// most intercompany accounts. Intercompany Accounts Receivable and
+	// Intercompany Accounts Payable, however, can be used only for recording
+	// amounts that are candidates for eliminations. For details, see the help
+	// topic Intercompany Accounts.
+	Eliminate  bool   `json:"eliminate,omitzero"`
 	ExternalID string `json:"externalId,omitempty"`
+	FullName   string `json:"fullName,omitempty"`
+	// Check the Include Children box to share the account with all the
+	// sub-subsidiaries associated with each subsidiary selected in the
+	// Subsidiary field.
+	GeneralRate     NSResource `json:"generalRate,omitzero"`
+	ID              string     `json:"id,omitempty"`
+	IncludeChildren bool       `json:"includeChildren,omitzero"`
+	// If this will be an Other Current Asset account and you want the balance
+	// of this account included in the total balance of the Inventory KPI,
+	// select the Inventory box.
+	Inventory bool `json:"inventory,omitzero"`
+	// Check this box to inactivate this account. Inactive accounts do not show
+	// in lists on transactions and records.
+	IsInactive bool `json:"isInactive,omitzero"`
+	// Check this box to make this account record solely for reporting
+	// purposes. Summary accounts are useful when you want to create a
+	// non-posting, inactive parent account that has active child accounts. If
+	// you do not have a OneWorld account, new summary accounts cannot have an
+	// opening balance, but you can convert an existing account with a
+	// transaction balance into a summary account. In this case, you cannot
+	// post additional transactions to the account. Summary accounts appear
+	// with their children in the chart of accounts list. You cannot merge a
+	// summary account into another account.
+	IsSummary        bool `json:"isSummary,omitzero"`
+	LastModifiedDate Date `json:"lastModifiedDate,omitzero"`
+	// If the Use Legal Name in Account accounting preference is enabled at
+	// Setup > Accounting > Preferences > Accounting Preferences, the Legal
+	// Name field appears. You can enter up to 400 characters in this field
+	// including special characters such as colon and semi colon. You can also
+	// enter characters such as Éé,Çç, and 2 byte characters such as 会計、科目.
+	// This field is useful in countries where the legal name of an entity is
+	// required by law. The Legal Name field can be added to financial reports
+	// where account is an available component. It is also available in
+	// advanced searches, SuiteScript, and ODBC. System notes maintains an
+	// audit trail specific to the activity on the Legal Name field.
+	LegalName     string                         `json:"legalName,omitempty"`
+	Links         Links                          `json:"links,omitempty"`
+	Localizations AccountLocalizationsCollection `json:"localizations,omitzero"`
+	Location      Location                       `json:"location,omitzero"`
+	// Enter the dollar amount limit per transaction with this account.
+	MMaxAmtPerTran float64 `json:"mMaxAmtPerTran,omitempty"`
+	// Enter an opening balance for this account.
+	OpeningBalance float64  `json:"openingBalance,omitempty"`
+	Parent         *Account `json:"parent,omitzero"`
+	// Check this box if you want to use the Confirm Transaction Matches and
+	// Reconcile Account Statement pages for this account. The original
+	// reconciliation pages are still available. To use the original pages,
+	// clear the box.
+	ReconcileWithMatching    bool                 `json:"reconcileWithMatching,omitzero"`
+	RefName                  string               `json:"refName,omitempty"`
+	RestrictToAccountingBook NSResourceCollection `json:"restrictToAccountingBook,omitzero"`
+	// Check this box to select this account for open balance currency
+	Revalue bool `json:"revalue,omitzero"`
+	// Enter a default ACH message for this account.
+	SAchMsg string `json:"sAchMsg,omitempty"`
+	// Enter the bank account number, up to 20 digits.
+	SBankCompanyID string `json:"sBankCompanyId,omitempty"`
+	// Enter the name of your bank.
+	SBankName string `json:"sBankName,omitempty"`
+	// Enter the 9-digit routing number for this bank account.
+	SBankRoutingNumber string               `json:"sBankRoutingNumber,omitempty"`
+	SSpecAcct          NSResource           `json:"sSpecAcct,omitzero"`
+	Subsidiary         SubsidiaryCollection `json:"subsidiary,omitzero"`
+	// Enter the date of the opening balance of this account.
+	TranDate Date `json:"tranDate,omitzero"`
+	// This field displays the base unit assigned to the Unit Type. The
+	// default unit cannot be changed.
+	Unit      string    `json:"unit,omitempty"`
+	UnitsType UnitsType `json:"unitsType,omitzero"`
 }
 
-func (a Account) IsEmpty() bool {
+func (a Account) IsZero() bool {
 	return zero.IsZero(a)
 }
 
@@ -232,7 +343,7 @@ type Invoice struct {
 	// 	RefName string `json:"refName"`
 	// } `json:"custbody_ste_transaction_type"`
 	CustomForm CustomForm `json:"customForm"`
-	DueDate    Date       `json:"dueDate,omitempty"`
+	DueDate    Date       `json:"dueDate,omitzero"`
 	Entity     struct {
 		Links   Links  `json:"links,omitempty"`
 		ID      string `json:"id"`
@@ -284,8 +395,8 @@ type Invoice struct {
 	// TotalCostEstimate    float64 `json:"totalCostEstimate"`
 	TranDate   Date      `json:"tranDate"`
 	TranID     string    `json:"tranId"`
-	Department RecordRef `json:"Department,omitempty"`
-	Class      RecordRef `json:"Class,omitempty"`
+	Department RecordRef `json:"Department,omitzero"`
+	Class      RecordRef `json:"Class,omitzero"`
 }
 
 func (i Invoice) MarshalJSON() ([]byte, error) {
@@ -552,7 +663,7 @@ type RecordRef struct {
 	// InternalID string `json:"id"`
 }
 
-func (r RecordRef) IsEmpty() bool {
+func (r RecordRef) IsZero() bool {
 	return zero.IsZero(r)
 }
 
@@ -570,7 +681,7 @@ type Classification struct {
 	Subsidiary       string `json:"subsidiary"`
 }
 
-func (c Classification) IsEmpty() bool {
+func (c Classification) IsZero() bool {
 	return zero.IsZero(c)
 }
 
@@ -589,7 +700,7 @@ type Department struct {
 	Parent           string `json:"parent,omitempty"`
 }
 
-func (d Department) IsEmpty() bool {
+func (d Department) IsZero() bool {
 	return zero.IsZero(d)
 }
 
@@ -615,16 +726,20 @@ type Address struct {
 type Locations []Location
 
 type Location struct {
-	Links                  []interface{} `json:"links"`
-	Fullname               string        `json:"fullname"`
-	ID                     string        `json:"id"`
-	Isinactive             string        `json:"isinactive"`
-	Lastmodifieddate       string        `json:"lastmodifieddate"`
-	Mainaddress            string        `json:"mainaddress"`
-	Makeinventoryavailable string        `json:"makeinventoryavailable"`
-	Name                   string        `json:"name"`
-	Subsidiary             string        `json:"subsidiary"`
-	Externalid             string        `json:"externalid,omitempty"`
+	Links                  []any  `json:"links,omitzero"`
+	Fullname               string `json:"fullname,omitzero"`
+	ID                     string `json:"id,omitzero"`
+	Isinactive             string `json:"isinactive,omitzero"`
+	Lastmodifieddate       string `json:"lastmodifieddate,omitzero"`
+	Mainaddress            string `json:"mainaddress,omitzero"`
+	Makeinventoryavailable string `json:"makeinventoryavailable,omitzero"`
+	Name                   string `json:"name,omitzero"`
+	Subsidiary             string `json:"subsidiary,omitzero"`
+	Externalid             string `json:"externalid,omitempty"`
+}
+
+func (l Location) IsZero() bool {
+	return zero.IsZero(l)
 }
 
 // known Transaction record types:
@@ -907,3 +1022,399 @@ type InvoiceTransaction struct {
 	Void                               string `json:"void"`
 	Voided                             string `json:"voided"`
 }
+
+type SalesTaxItems []SalesTaxItem
+
+type SalesTaxItem struct {
+	CustomForm  CustomForm `json:"customForm"`
+	Description string     `json:"description"`
+	ExternalID  string     `json:"externalId"`
+	ID          string     `json:"id"`
+	// Once the tax code record has been saved, you cannot change the value in the Tax Type field.
+	ImportantNote string `json:"importantNote"`
+	// Check this box to inactivate this record. Inactive records do not show on transactions and records for selection in lists.
+	IsInactive bool   `json:"isInactive"`
+	ItemType   string `json:"itemType"`
+	Links      Links  `json:"links"`
+	// Enter a name for this record.
+	Name    string  `json:"name"`
+	RefName string  `json:"refName"`
+	TaxType TaxType `json:"taxType"`
+}
+
+func (s SalesTaxItem) IsZero() bool {
+	return zero.IsZero(s)
+}
+
+// https://system.netsuite.com/help/helpcenter/en_US/APIs/REST_API_Browser/record/v1/2025.1/index.html#/definitions/taxType
+
+// country: object
+//
+// id Internal identifier: string BR , AU , SG , JP , GB , IT , FR , CA , US
+// refName Reference Name: string
+//
+// customForm: object
+//
+// id Internal identifier: string -22519
+// refName Reference Name: string
+//
+// description Description: string
+//
+//     Enter a description for this record.
+// doesNotAddToTotal Does Not Add to Transaction Total: boolean
+//
+//     Check this box for special tax types that do not impact the transaction total, such as withholding tax. Tax types with this property can be used on sales and purchase transactions.
+// externalId External ID: string
+// id Internal ID: string
+// isInactive Inactive: boolean
+//
+//     Check this box to inactivate this record. Inactive records do not show on transactions and records for selection in lists.
+// links Links: nsLink
+// nsLink
+// name Name: string
+//
+//     Enter a name for this record.
+// nexusAccounts: taxType-nexusAccountsCollection
+// postToItemCost Post to Item Cost: boolean
+//
+//     Check this box if the tax amounts for the tax type should be added to the related item cost. Tax types with this property can be used on purchase transactions only.
+// refName Reference Name: string
+// reverseCharge Reverse Charge: boolean
+//
+//     Check this box if reverse charge applies to transactions that have this tax type. Tax types with this property can be used on purchase transactions only.
+// taxInNetAmount Tax Included in Net Amount: boolean
+//
+//     Check this box for special tax types where the tax amount is included in the item price. Tax types with this property can be used on sales and purchase transactions.
+
+type TaxType struct {
+	Country           NSResource              `json:"country,omitzero"`
+	CustomForm        CustomForm              `json:"customForm,omitzero"`
+	Description       string                  `json:"description,omitempty"`
+	DoesNotAddToTotal bool                    `json:"doesNotAddToTotal,omitempty"`
+	ExternalID        string                  `json:"externalId,omitempty"`
+	ID                string                  `json:"id,omitempty"`
+	IsInactive        bool                    `json:"isInactive,omitempty"`
+	Links             Links                   `json:"links,omitzero"`
+	Name              string                  `json:"name,omitempty"`
+	NexusAccounts     NexusAccountsCollection `json:"nexusAccounts,omitzero"`
+	PostToItemCost    bool                    `json:"postToItemCost,omitempty"`
+	RefName           string                  `json:"refName,omitempty"`
+	ReverseCharge     bool                    `json:"reverseCharge,omitempty"`
+	TaxInNetAmount    bool                    `json:"taxInNetAmount,omitempty"`
+}
+
+func (t TaxType) IsZero() bool {
+	return zero.IsZero(t)
+}
+
+type NSResource struct {
+	Links   Links  `json:"links,omitempty"`
+	ID      string `json:"id"`
+	RefName string `json:"refName,omitempty"`
+}
+
+func (n NSResource) IsZero() bool {
+	return zero.IsZero(n)
+}
+
+type TaxAccount NSResource
+
+type StatisticalJournalEntryCollection Collection[StatisticalJournalEntries]
+
+type NSLink struct {
+	Rel  string `json:"rel"`
+	Href string `json:"href"`
+}
+
+type StatisticalJournalEntries []StatisticalJournalEntry
+
+type StatisticalJournalEntry struct {
+	// Check this box to update the balance of multiple statistical accounts at
+	// the same time. The account balances you enter overwrite all previous
+	// values. Absolute values are available to you through reporting and for
+	// use in dynamic allocation schedules.
+	AbsoluteUpdate            bool                     `json:"absoluteUpdate,omitempty"`
+	AbsoluteUpdateJournalLink *StatisticalJournalEntry `json:"absoluteUpdateJournalLink,omitzero"`
+	ApprovalStatus            RecordRef                `json:"approvalStatus,omitzero"`
+	// Check this box to indicate that this journal entry is approved. If you
+	// check this box, this journal entry will post immediately. If you do not
+	// check this box, this journal entry must be approved before it posts.
+	Approved               bool                                  `json:"approved,omitempty"`
+	Class                  Classification                        `json:"Class,omitzero"`
+	CreatedDate            Date                                  `json:"createdDate,omitzero"`
+	CustomForm             CustomForm                            `json:"customForm,omitzero"`
+	Department             Department                            `json:"Department,omitzero"`
+	ExcludeFromGLNumbering bool                                  `json:"excludeFromGLNumbering,omitempty"`
+	ExternalID             string                                `json:"externalId,omitempty"`
+	ID                     string                                `json:"id,omitempty"`
+	IsReversal             bool                                  `json:"isReversal,omitempty"`
+	LastModifiedDate       Date                                  `json:"lastModifiedDate,omitzero"`
+	Line                   StatisticalJournalEntryLineCollection `json:"line"`
+	Links                  Links                                 `json:"links,omitzero"`
+	Location               Location                              `json:"location,omitzero"`
+	// If you wish, enter a memo to describe this journal entry. It will appear
+	// on this transaction detail as well as reports such as a 2-line account
+	// register.
+	Memo              string                   `json:"memo"`
+	NextApprover      Employee                 `json:"nextApprover,omitzero"`
+	OffsetJournalLink *StatisticalJournalEntry `json:"offsetJournalLink,omitzero"`
+	ParentStat        NSResource               `json:"parentStat,omitzero"`
+	PostingPeriod     AccountingPeriod         `json:"postingPeriod,omitzero"`
+	RefName           string                   `json:"refName,omitempty"`
+	Reversal          *StatisticalJournalEntry `json:"reversal,omitzero"`
+	// If this journal entry is intended to be reversed, enter the date for the
+	// reversing entry to be posted. If Defer Entry is checked, this field is
+	// mandatory.
+	ReversalDate Date `json:"reversalDate,omitzero"`
+	// Check this box to make the reversal a memorized transaction that
+	// automatically occurs on the date entered in the required Reversal Date
+	// field. Clear this box to make the reversal an immediately entered
+	// transaction with the date in the Reversal Date field.
+	ReversalDefer bool       `json:"reversalDefer,omitempty"`
+	Subsidiary    Subsidiary `json:"subsidiary,omitzero"`
+	// In this field, NetSuite keeps track of the difference between the debits
+	// and credits you enter below. If this field does not equal 0.00, NetSuite
+	// will not allow you to submit this transaction.
+	Total float64 `json:"total,omitempty"`
+	// NetSuite inserts today's date as the date of this journal entry. You
+	// can enter or select another date.
+	TranDate Date `json:"tranDate,omitzero"`
+	// NetSuite increases the largest journal entry number by one. If you wish,
+	// you can type another number. The next journal entry number will revert
+	// to the standard pattern. You can enter a maximum of 45 characters in
+	// this field.
+	TranID    string    `json:"tranId,omitempty"`
+	Unit      string    `json:"unit,omitempty"`
+	UnitsType UnitsType `json:"unitsType,omitzero"`
+	Void      bool      `json:"void,omitempty"`
+}
+
+// https://system.netsuite.com/help/helpcenter/en_US/APIs/REST_API_Browser/record/v1/2025.1/index.html#/definitions/statisticalJournalEntry-lineCollection
+
+type StatisticalJournalEntryLineCollection Collection[StatisticalJournalEntryLineElements]
+
+type StatisticalJournalEntryLineElements []StatisticalJournalEntryLineElement
+
+// https://system.netsuite.com/help/helpcenter/en_US/APIs/REST_API_Browser/record/v1/2025.1/index.html#/definitions/statisticalJournalEntry-lineElement
+type StatisticalJournalEntryLineElement struct {
+	Account                Account    `json:"Account,omitzero"`
+	Class                  RecordRef  `json:"Class,omitzero"`
+	Debit                  float64    `json:"debitAmount,omitempty"`
+	Department             Department `json:"Department,omitzero"`
+	Eliminate              bool       `json:"eliminate,omitempty"`
+	Entity                 NSResource `json:"entity,omitzero"`
+	Line                   int        `json:"line,omitempty"`
+	LineCreatedDate        Date       `json:"lineCreatedDate,omitzero"`
+	LineLastModifiedDate   Date       `json:"lineLastModifiedDate,omitzero"`
+	LineUnit               string     `json:"lineUnit,omitempty"`
+	Links                  Links      `json:"links,omitzero"`
+	Location               Location   `json:"location,omitzero"`
+	Memo                   string     `json:"memo"`
+	PreviewDebit           float64    `json:"previewDebitAmount,omitempty"`
+	RefName                string     `json:"refName,omitempty"`
+	RevenueRecognitionRule NSResource `json:"revenueRecognitionRule,omitzero"`
+}
+
+// https://system.netsuite.com/help/helpcenter/en_US/APIs/REST_API_Browser/record/v1/2025.1/index.html#/definitions/employee
+type Employee struct {
+}
+
+// https://system.netsuite.com/help/helpcenter/en_US/APIs/REST_API_Browser/record/v1/2025.1/index.html#/definitions/unitsType
+//
+//	externalId External ID: string
+//
+// id Internal ID: string
+// isInactive Inactive: boolean
+//
+//	Check this box to inactivate this unit record. When a record is inactive, it does not appear in lists and cannot be selected on records and transactions.
+//
+// lastModifiedDate Last Modified Date: string (date-time)
+// links Links: nsLink
+// nsLink
+// name Type Name: string
+//
+//	Enter a name for the type of units you are creating. For example, enter "Length" to create units of Inch, Foot and Yard.
+//
+// refName Reference Name: string
+// uom: unitsType-uomCollection
+type UnitsType struct {
+	ExternalID string `json:"externalId,omitempty"`
+	ID         string `json:"id,omitempty"`
+	// Check this box to inactivate this unit record. When a record is inactive,
+	// it does not appear in lists and cannot be selected on records and
+	// transactions.
+	IsInactive       bool  `json:"isInactive,omitempty"`
+	LastModifiedDate Date  `json:"lastModifiedDate,omitzero"`
+	Links            Links `json:"links,omitempty"`
+	// Enter a name for the type of units you are creating. For example, enter
+	// "Length" to create units of Inch, Foot and Yard.
+	Name    string                 `json:"name,omitempty"`
+	RefName string                 `json:"refName,omitempty"`
+	UOM     UnitsTypeUOMCollection `json:"uom,omitempty"`
+}
+
+func (u UnitsType) IsZero() bool {
+	return zero.IsZero(u)
+}
+
+// https://system.netsuite.com/help/helpcenter/en_US/APIs/REST_API_Browser/record/v1/2025.1/index.html#/definitions/unitsType-uomCollection
+// count Count: integer (int64)
+// hasMore Has More Results: boolean
+// items: unitsType-uomElement
+// unitsType-uomElement
+// links Links: nsLink
+// nsLink
+// offset Query Offset: integer (int64)
+// totalResults Total Results: integer (int64)
+
+type UnitsTypeUOMCollection Collection[UnitsTypeUOMElements]
+
+type UnitsTypeUOMElements []UnitsTypeUOMElement
+
+// https://system.netsuite.com/help/helpcenter/en_US/APIs/REST_API_Browser/record/v1/2025.1/index.html#/definitions/unitsType-uomElement
+//
+//	abbreviation Abbreviation: string
+//
+// baseUnit Base Unit: boolean
+// conversionRate Conversion Rate {1}: number (float)
+// inUse Used: boolean
+// internalId Internal ID: integer (int64)
+// links Links: nsLink
+// nsLink
+// pluralAbbreviation Plural Abbreviation: string
+// pluralName Plural Name: string
+// refName Reference Name: string
+// unitName Name: string
+type UnitsTypeUOMElement struct {
+	Abbreviation       string  `json:"abbreviation,omitempty"`
+	BaseUnit           bool    `json:"baseUnit,omitempty"`
+	ConversionRate     float64 `json:"conversionRate,omitempty"`
+	InUse              bool    `json:"inUse,omitempty"`
+	InternalID         int     `json:"internalId,omitempty"`
+	Links              Links   `json:"links,omitempty"`
+	PluralAbbreviation string  `json:"pluralAbbreviation,omitempty"`
+	PluralName         string  `json:"pluralName,omitempty"`
+	RefName            string  `json:"refName,omitempty"`
+	UnitName           string  `json:"unitName,omitempty"`
+}
+
+// count Count: integer (int64)
+// hasMore Has More Results: boolean
+// items: account-localizationsElement
+// account-localizationsElement
+// links Links: nsLink
+// nsLink
+// offset Query Offset: integer (int64)
+// totalResults Total Results: integer (int64)
+
+// https://system.netsuite.com/help/helpcenter/en_US/APIs/REST_API_Browser/record/v1/2025.1/index.html#/definitions/account-localizationsCollection
+type AccountLocalizationsCollection Collection[AccountLocalizationsElements]
+
+func (c AccountLocalizationsCollection) IsZero() bool {
+	return zero.IsZero(c)
+}
+
+type AccountLocalizationsElements []AccountLocalizationsElement
+
+// https://system.netsuite.com/help/helpcenter/en_US/APIs/REST_API_Browser/record/v1/2025.1/index.html#/definitions/account-localizationsElement
+type AccountLocalizationsElement struct {
+	AccountingContext NSResource `json:"accountingcontext,omitzero"`
+	AcctName          string     `json:"acctname,omitempty"`
+	AcctNumber        string     `json:"acctnumber,omitempty"`
+	LegalName         string     `json:"legalName,omitempty"`
+	Links             Links      `json:"links,omitempty"`
+	Locale            NSResource `json:"locale,omitzero"`
+	RefName           string     `json:"refName,omitempty"`
+}
+
+// https://system.netsuite.com/help/helpcenter/en_US/APIs/REST_API_Browser/record/v1/2025.1/index.html#/definitions/nsResourceCollection
+type NSResourceCollection Collection[[]NSResource]
+
+func (c NSResourceCollection) IsZero() bool {
+	return zero.IsZero(c)
+}
+
+// https://system.netsuite.com/help/helpcenter/en_US/APIs/REST_API_Browser/record/v1/2025.1/index.html#/definitions/account-accountContextSearchCollection
+type AccountContextSearchCollection Collection[AccountContextSearchElements]
+
+func (c AccountContextSearchCollection) IsZero() bool {
+	return zero.IsZero(c)
+}
+
+type AccountContextSearchElements []AccountContextSearchElement
+
+// https://system.netsuite.com/help/helpcenter/en_US/APIs/REST_API_Browser/record/v1/2025.1/index.html#/definitions/account-accountContextSearchElement
+type AccountContextSearchElement struct {
+	AccountingContext NSResource `json:"accountingcontext,omitzero"`
+	AcctName          string     `json:"acctname,omitempty"`
+	AcctNumber        string     `json:"acctnumber,omitempty"`
+	LegalName         string     `json:"legalName,omitempty"`
+	Links             Links      `json:"links,omitempty"`
+	Locale            NSResource `json:"locale,omitzero"`
+	RefName           string     `json:"refName,omitempty"`
+}
+
+type Collection[T any] struct {
+	Count        int      `json:"count"`
+	HasMore      bool     `json:"hasMore"`
+	Items        T        `json:"items"`
+	Links        []NSLink `json:"links"`
+	Offset       int      `json:"offset"`
+	TotalResults int      `json:"totalResults"`
+}
+
+func (c Collection[T]) IsZero() bool {
+	return zero.IsZero(c)
+}
+
+type SubsidiaryCollection Collection[Subsidiaries]
+
+func (c SubsidiaryCollection) IsZero() bool {
+	return zero.IsZero(c)
+}
+
+type NexusAccountsCollection Collection[NexusAccountsElements]
+
+type NexusAccountsElements []NexusAccountElement
+
+// https://system.netsuite.com/help/helpcenter/en_US/APIs/REST_API_Browser/record/v1/2025.1/index.html#/definitions/taxType-nexusAccountsElement
+type NexusAccountElement struct {
+	Links              Links   `json:"links,omitempty"`
+	Nexus              Nexus   `json:"nexus,omitzero"`
+	PayablesAccount    Account `json:"payablesAccount,omitzero"`
+	ReceivablesAccount Account `json:"receivablesAccount,omitzero"`
+	RefName            string  `json:"refName,omitempty"`
+}
+
+type Nexuses []Nexus
+
+// https://system.netsuite.com/help/helpcenter/en_US/APIs/REST_API_Browser/record/v1/2025.1/index.html#/definitions/nexus
+type Nexus struct {
+	Country    NSResource `json:"country,omitzero"`
+	CustomForm CustomForm `json:"customForm,omitzero"`
+	// Enter a description for this record.
+	Description string     `json:"description,omitempty"`
+	ExternalID  string     `json:"externalId,omitempty"`
+	ID          string     `json:"id,omitempty"`
+	IsInactive  bool       `json:"isInactive,omitempty"`
+	Links       Links      `json:"links,omitempty"`
+	ParentNexus *Nexus     `json:"parentNexus,omitzero"`
+	RefName     string     `json:"refName,omitempty"`
+	State       NSResource `json:"state,omitzero"`
+	TaxAgency   Vendor     `json:"taxAgency,omitzero"`
+	// Check this box to use the fulfillment date as the tax point date for this
+	// transaction. This overrides the default Nexus setting which uses the
+	// transaction date to determine the tax point date. This setting is
+	// typically used for jurisdictions which require the item fulfillment date
+	// to be used to define the tax point date.
+	TaxDateFromFulfillment bool `json:"taxDateFromFulfillment,omitempty"`
+}
+
+// https://system.netsuite.com/help/helpcenter/en_US/APIs/REST_API_Browser/record/v1/2025.1/index.html#/definitions/vendor
+type Vendor struct {
+	ID      string `json:"id,omitempty"`
+	RefName string `json:"refName,omitempty"`
+	Links   Links  `json:"links,omitempty"`
+}
+
+type NexusCollection Collection[[]Nexus]

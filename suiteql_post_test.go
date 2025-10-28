@@ -53,30 +53,30 @@ func TestSuiteqlPost(t *testing.T) {
 	log.Fatalf("%+v", customers)
 }
 
-func TestSuiteqlPostCustomers(t *testing.T) {
-	req := client.NewSuiteqlPostRequest()
-	// req.QueryParams().Limit = 12
-	req.RequestBody().Q = "SELECT * FROM customer where companyName = 'Agate Utvikling AS_170122'"
-	req.RequestBody().Q = "SELECT * FROM customer where lastmodifieddate > '20.03.2020' and lastmodifieddate < '20.03.2022'"
-	req.RequestBody().Q = "SELECT * FROM customer where parent = 13299"
-	req.RequestBody().Q = "SELECT * FROM customer where id IN(2607)"
-
-	// req.RequestBody().Q = "SELECT * FROM classification where name like '%196%'"
-	resp, err := req.Do()
-	if err != nil {
-		t.Error(err)
-	}
-
-	// b, _ := json.MarshalIndent(resp, "", "  ")
-	// fmt.Println(string(b))
-
-	customers, err := resp.ToCustomers(client)
-	if err != nil {
-		t.Error(err)
-	}
-
-	log.Fatalf("%+v", customers[1])
-}
+// func TestSuiteqlPostCustomers(t *testing.T) {
+// 	req := client.NewSuiteqlPostRequest()
+// 	// req.QueryParams().Limit = 12
+// 	req.RequestBody().Q = "SELECT * FROM customer where companyName = 'Agate Utvikling AS_170122'"
+// 	req.RequestBody().Q = "SELECT * FROM customer where lastmodifieddate > '20.03.2020' and lastmodifieddate < '20.03.2022'"
+// 	req.RequestBody().Q = "SELECT * FROM customer where parent = 13299"
+// 	req.RequestBody().Q = "SELECT * FROM customer where id IN(2607)"
+//
+// 	// req.RequestBody().Q = "SELECT * FROM classification where name like '%196%'"
+// 	resp, err := req.Do()
+// 	if err != nil {
+// 		t.Error(err)
+// 	}
+//
+// 	// b, _ := json.MarshalIndent(resp, "", "  ")
+// 	// fmt.Println(string(b))
+//
+// 	customers, err := resp.ToCustomers(client)
+// 	if err != nil {
+// 		t.Error(err)
+// 	}
+//
+// 	log.Fatalf("%+v", customers[1])
+// }
 
 func TestSuiteqlPostAddresses(t *testing.T) {
 	req := client.NewSuiteqlPostRequest()
@@ -117,4 +117,64 @@ func TestSuiteqlPostLocations(t *testing.T) {
 	}
 
 	log.Fatalf("%+v", customers[1])
+}
+
+func TestSuiteqlPostCustomers(t *testing.T) {
+	req := client.NewSuiteqlPostRequest()
+	req.QueryParams().Limit = 100
+	req.RequestBody().Q = "SELECT * FROM customer"
+	resp, err := req.Do()
+	if err != nil {
+		t.Error(err)
+	}
+
+	// b, _ := json.MarshalIndent(resp, "", "  ")
+	// fmt.Println(string(b))
+
+	customers, err := resp.ToCustomers(client)
+	if err != nil {
+		t.Error(err)
+	}
+
+	log.Fatalf("%+v", customers[1])
+}
+
+func TestSuiteqlPostSalesTaxItems(t *testing.T) {
+	req := client.NewSuiteqlPostRequest()
+	req.QueryParams().Limit = 100
+	req.RequestBody().Q = "SELECT * FROM salestaxitem"
+	resp, err := req.Do()
+	if err != nil {
+		t.Error(err)
+	}
+
+	// b, _ := json.MarshalIndent(resp, "", "  ")
+	// fmt.Println(string(b))
+
+	salesTaxItems, err := resp.ToSalesTaxItems(client)
+	if err != nil {
+		t.Error(err)
+	}
+
+	log.Fatalf("%+v", salesTaxItems)
+}
+
+func TestSuiteqlPostNexus(t *testing.T) {
+	req := client.NewSuiteqlPostRequest()
+	req.QueryParams().Limit = 100
+	req.RequestBody().Q = "SELECT * FROM nexus where id IN('Netherlands')"
+	resp, err := req.Do()
+	if err != nil {
+		t.Error(err)
+	}
+
+	// b, _ := json.MarshalIndent(resp, "", "  ")
+	// fmt.Println(string(b))
+
+	nexuses, err := resp.ToNexuses(client)
+	if err != nil {
+		t.Error(err)
+	}
+
+	log.Fatalf("%+v", nexuses)
 }

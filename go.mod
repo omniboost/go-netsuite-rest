@@ -1,6 +1,6 @@
 module github.com/omniboost/go-netsuite-rest
 
-go 1.24.0
+go 1.25
 
 require (
 	github.com/cydev/zero v0.0.0-20160322155811-4a4535dd56e7
