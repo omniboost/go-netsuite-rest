@@ -18,6 +18,7 @@ func TestSuiteqlPost(t *testing.T) {
 	//req.RequestBody().Q = "SELECT * FROM classification"
 	req.RequestBody().Q = "SELECT TOP 10 transaction.* FROM transaction INNER JOIN customlist_nch_source ON transaction.custbody_nch_source = customlist_nch_source.internalid and customlist_nch_source.name not in ('Mews', 'EventTemple') WHERE transaction.createdDate >= to_date('2025-10-01 00:00:00', 'yyyy-mm-dd hh24:mi:ss') AND transaction.recordtype = 'invoice'"
 	req.RequestBody().Q = "SELECT TOP 10 transaction.* FROM transaction WHERE transaction.createdDate >= to_date('2025-10-01 00:00:00', 'yyyy-mm-dd hh24:mi:ss') AND transaction.recordtype = 'invoice' AND BUILTIN.DF(custbody_nch_source) not in ('Mews', 'EventTemple')"
+	req.RequestBody().Q = "SELECT * from currency"
 	//req.RequestBody().Q = "SELECT TOP 10 * FROM transaction WHERE createdDate >= to_date('2025-10-01 00:00:00', 'yyyy-mm-dd hh24:mi:ss') AND recordtype = 'creditmemo' AND custbody_nch_source NOT IN ('Mews', 'EventTemple')"
 
 	// creditmemo

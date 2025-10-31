@@ -108,18 +108,12 @@ func (r *CustomersGetRequest) NewResponseBody() *CustomersGetResponseBody {
 }
 
 type CustomersGetResponseBody struct {
-	Links   Links `json:"links"`
-	Count   int   `json:"count"`
-	HasMore bool  `json:"hasMore"`
-	Items   []struct {
-		Links []struct {
-			Rel  string `json:"rel"`
-			Href string `json:"href"`
-		} `json:"links"`
-		ID string `json:"id"`
-	} `json:"items"`
-	Offset       int `json:"offset"`
-	TotalResults int `json:"totalResults"`
+	Links        Links     `json:"links"`
+	Count        int       `json:"count"`
+	HasMore      bool      `json:"hasMore"`
+	Items        Customers `json:"items"`
+	Offset       int       `json:"offset"`
+	TotalResults int       `json:"totalResults"`
 }
 
 func (r *CustomersGetRequest) URL() (*url.URL, error) {

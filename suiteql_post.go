@@ -231,6 +231,18 @@ func (r SuiteqlPostResponseBody) ToNexuses(client *Client) (SQLNexuses, error) {
 	return nexuses, err
 }
 
+func (r SuiteqlPostResponseBody) ToCurrencies(client *Client) (Currencies, error) {
+	currencies := Currencies{}
+
+	reader := bytes.NewReader(r.Items)
+	dec := json.NewDecoder(reader)
+	if client.disallowUnknownFields {
+		dec.DisallowUnknownFields()
+	}
+	err := dec.Decode(&currencies)
+	return currencies, err
+}
+
 func (r *SuiteqlPostRequest) URL() (*url.URL, error) {
 	u, err := r.client.GetEndpointURL("/query/v1/suiteql", r.PathParams())
 	return &u, err
