@@ -166,12 +166,50 @@ func (p AccountingPeriod) IsZero() bool {
 type Subsidiaries []Subsidiary
 
 type Subsidiary struct {
-	Links   Links  `json:"links,omitempty"`
-	ID      string `json:"id,omitempty"`
-	RefName string `json:"refName,omitempty"`
+	Links              Links            `json:"links,omitzero"`
+	ClassTranslation   ClassTranslation `json:"classTranslation,omitzero"`
+	Country            NSResource       `json:"country,omitzero"`
+	Currency           NSResource       `json:"currency,omitzero"`
+	ID                 string           `json:"id,omitempty"`
+	IsElimination      *bool            `json:"isElimination,omitempty"`
+	IsInactive         *bool            `json:"isInactive,omitempty"`
+	LastModifiedDate   Date             `json:"lastModifiedDate,omitzero"`
+	LegalName          string           `json:"legalName,omitempty"`
+	MainAddress        Address          `json:"mainAddress,omitzero"`
+	Name               string           `json:"name,omitempty"`
+	Parent             NSResource       `json:"parent,omitzero"`
+	RefName            string           `json:"refName,omitempty"`
+	ReturnAddress      ReturnAddress    `json:"returnAddress,omitzero"`
+	ShippingAddress    ShippingAddress  `json:"shippingAddress,omitzero"`
+	State              string           `json:"state,omitempty"`
+	TranInternalPrefix string           `json:"tranInternalPrefix,omitempty"`
+	URL                string           `json:"url,omitempty"`
 }
 
 func (s Subsidiary) IsZero() bool {
+	return zero.IsZero(s)
+}
+
+type ClassTranslationElement struct {
+	Links    Links  `json:"links,omitempty"`
+	Language string `json:"language,omitempty"`
+	Locale   struct {
+		ID      string `json:"id,omitempty"`
+		RefName string `json:"refName,omitempty"`
+	} `json:"locale,omitempty"`
+}
+
+func (s ClassTranslationElement) IsZero() bool {
+	return zero.IsZero(s)
+}
+
+type ClassTranslation struct {
+	Links        Links                     `json:"links,omitempty"`
+	Items        []ClassTranslationElement `json:"items,omitempty"`
+	TotalResults int                       `json:"totalResults,omitempty"`
+}
+
+func (s ClassTranslation) IsZero() bool {
 	return zero.IsZero(s)
 }
 
@@ -360,16 +398,18 @@ type Invoice struct {
 	// 	Items        []interface{} `json:"items"`
 	// 	TotalResults int           `json:"totalResults"`
 	// } `json:"accountingBookDetail"`
-	// AmountPaid              float64 `json:"amountPaid"`
-	// AmountRemaining         float64 `json:"amountRemaining"`
-	// AmountRemainingTotalBox float64 `json:"amountRemainingTotalBox"`
-	// BillingAddress          Address `json:"billingAddress"`
-	// CreatedDate Date `json:"createdDate"`
-	// Currency    struct {
-	// 	Links   Links  `json:"links"`
-	// 	ID      string `json:"id"`
-	// 	RefName string `json:"refName"`
-	// } `json:"currency"`
+	AmountPaid              float64 `json:"amountPaid"`
+	AmountRemaining         float64 `json:"amountRemaining"`
+	AmountRemainingTotalBox float64 `json:"amountRemainingTotalBox"`
+	BillAddress             string  `json:"billAddress"`
+	BillingAddress          Address `json:"billingAddress"`
+	BillingAddressText      string  `json:"billingAddress_text"`
+	CreatedDate             Date    `json:"createdDate"`
+	Currency                struct {
+		Links   Links  `json:"links"`
+		ID      string `json:"id"`
+		RefName string `json:"refName"`
+	} `json:"currency"`
 	// CustbodyAtlasExistCustHdn struct {
 	// 	Links   Links  `json:"links"`
 	// 	ID      string `json:"id"`
@@ -458,10 +498,10 @@ type Invoice struct {
 	// TaxPointDateOverride Bool    `json:"taxPointDateOverride"`
 	// TaxRegOverride       Bool    `json:"taxRegOverride"`
 	// TaxTotal             float64 `json:"taxTotal"`
-	// ToBeEmailed          Bool    `json:"toBeEmailed"`
-	// ToBeFaxed            Bool    `json:"toBeFaxed"`
-	// ToBePrinted          Bool    `json:"toBePrinted"`
-	// Total                float64 `json:"total"`
+	ToBeEmailed Bool    `json:"toBeEmailed"`
+	ToBeFaxed   Bool    `json:"toBeFaxed"`
+	ToBePrinted Bool    `json:"toBePrinted"`
+	Total       float64 `json:"total"`
 	// TotalAfterTaxes      float64 `json:"totalAfterTaxes"`
 	// TotalCostEstimate    float64 `json:"totalCostEstimate"`
 	TranDate   Date      `json:"tranDate"`
@@ -2092,6 +2132,8 @@ type ShipGroupElement struct {
 
 type ShipItem struct {
 }
+
+type ReturnAddress Address
 
 type ShippingAddress Address
 
