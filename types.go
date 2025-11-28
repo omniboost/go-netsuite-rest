@@ -1,6 +1,8 @@
 package netsuite
 
 import (
+	"encoding/json"
+
 	"github.com/cydev/zero"
 	"github.com/omniboost/go-netsuite-rest/omitempty"
 )
@@ -44,7 +46,7 @@ type JournalEntry struct {
 	TranID               string           `json:"tranId,omitempty"`
 	Void                 bool             `json:"void,omitempty"`
 
-	// CustomFields map[string]NSResource `json:"customFields,omitempty"`
+	CustomFields map[string]NSResource `json:"-"`
 }
 
 // func (j JournalEntry) MarshalJSON() ([]byte, error) {
@@ -184,6 +186,18 @@ type Subsidiary struct {
 	State              string           `json:"state,omitempty"`
 	TranInternalPrefix string           `json:"tranInternalPrefix,omitempty"`
 	URL                string           `json:"url,omitempty"`
+
+	CustomFields map[string]any `json:"-"`
+}
+
+func (s *Subsidiary) UnmarshalJSON(data []byte) error {
+	err := UnmarshalCustomFields(data, &s.CustomFields)
+	if err != nil {
+		return err
+	}
+
+	type Alias Subsidiary
+	return json.Unmarshal(data, (*Alias)(s))
 }
 
 func (s Subsidiary) IsZero() bool {
@@ -456,7 +470,7 @@ type Invoice struct {
 	CustomForm CustomForm `json:"customForm,omitzero"`
 	DueDate    Date       `json:"dueDate,omitzero"`
 	Entity     struct {
-		Links   Links  `json:"links,omitempty"`
+		Links   Links  `json:"links,omitzero"`
 		ID      string `json:"id"`
 		RefName string `json:"refName,omitempty"`
 	} `json:"entity"`
@@ -508,10 +522,23 @@ type Invoice struct {
 	TranID     string    `json:"tranId"`
 	Department RecordRef `json:"Department,omitzero"`
 	Class      RecordRef `json:"Class,omitzero"`
+
+	CustomFields map[string]any `json:"-"`
 }
 
 func (i Invoice) MarshalJSON() ([]byte, error) {
-	return omitempty.MarshalJSON(i)
+	type Alias Invoice
+	return MarshalCustomFields(Alias(i), i.CustomFields)
+}
+
+func (i *Invoice) UnmarshalJSON(data []byte) error {
+	err := UnmarshalCustomFields(data, &i.CustomFields)
+	if err != nil {
+		return err
+	}
+
+	type Alias Invoice
+	return json.Unmarshal(data, (*Alias)(i))
 }
 
 type CreditMemo struct {
@@ -754,10 +781,22 @@ type CreditMemo struct {
 	VsoeAutoCalc      bool       `json:"vsoeAutoCalc,omitzero"`
 	WebSite           string     `json:"webSite,omitempty"`
 	WhichChargesToAdd NSResource `json:"whichChargesToAdd,omitzero"`
+
+	CustomFields map[string]any `json:"-"`
 }
 
 func (c CreditMemo) MarshalJSON() ([]byte, error) {
 	return omitempty.MarshalJSON(c)
+}
+
+func (c *CreditMemo) UnmarshalJSON(data []byte) error {
+	err := UnmarshalCustomFields(data, &c.CustomFields)
+	if err != nil {
+		return err
+	}
+
+	type Alias CreditMemo
+	return json.Unmarshal(data, (*Alias)(c))
 }
 
 type Customers []Customer
@@ -969,6 +1008,18 @@ type InvoiceItem struct {
 	// Units               string  `json:"units"`
 	// CustCol2 string `json:"custcol2"`
 	// CustCol3 string `json:"custcol3"`
+
+	CustomFields map[string]any `json:"-"`
+}
+
+func (i *InvoiceItem) UnmarshalJSON(data []byte) error {
+	err := UnmarshalCustomFields(data, &i.CustomFields)
+	if err != nil {
+		return err
+	}
+
+	type Alias InvoiceItem
+	return json.Unmarshal(data, (*Alias)(i))
 }
 
 type InvoiceTaxDetails struct {
@@ -2097,6 +2148,18 @@ type CreditMemoItemElement struct {
 	VSOEPermitDiscount        NSResource       `json:"vsoePermitDiscount,omitzero"`
 	VSOEPrice                 float64          `json:"vsoePrice,omitempty"`
 	VSOESOPGroup              NSResource       `json:"vsoeSOPGroup,omitzero"`
+
+	CustomFields map[string]any `json:"-"`
+}
+
+func (c *CreditMemoItemElement) UnmarshalJSON(data []byte) error {
+	err := UnmarshalCustomFields(data, &c.CustomFields)
+	if err != nil {
+		return err
+	}
+
+	type Alias CreditMemoItemElement
+	return json.Unmarshal(data, (*Alias)(c))
 }
 
 type PartnersCollection Collection[PartnersElements]

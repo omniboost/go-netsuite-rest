@@ -17,7 +17,15 @@ type Link struct {
 	Href string `json:"href"`
 }
 
+func (l Link) IsZero() bool {
+	return zero.IsZero(l)
+}
+
 type Fields []Field
+
+func (f Fields) IsZero() bool {
+	return zero.IsZero(f)
+}
 
 func (ff Fields) MarshalSchema() string {
 	fields := []string{}
