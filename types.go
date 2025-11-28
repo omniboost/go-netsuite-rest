@@ -953,6 +953,23 @@ type Customer struct {
 	DefaultShippingAddress string `json:"defaultshippingaddress,omitempty"`
 	Parent                 string `json:"parent,omitempty"`
 	CustomerNumber         string `json:"custentity_nch_customer_number,omitempty"`
+
+	CustomFields map[string]any `json:"-"`
+}
+
+func (i Customer) MarshalJSON() ([]byte, error) {
+	type Alias Customer
+	return MarshalCustomFields(Alias(i), i.CustomFields)
+}
+
+func (i *Customer) UnmarshalJSON(data []byte) error {
+	err := UnmarshalCustomFields(data, &i.CustomFields)
+	if err != nil {
+		return err
+	}
+
+	type Alias Customer
+	return json.Unmarshal(data, (*Alias)(i))
 }
 
 type InvoiceItemCollection Collection[InvoiceItems]
