@@ -1809,7 +1809,7 @@ type AppliedRulesElement struct {
 	CreationDate        Date   `json:"creationDate,omitzero"`
 	Details             string `json:"details,omitempty"`
 	ExternalLogID       int    `json:"externalLogId,omitempty"`
-	ID                  string `json:"id,omitempty"`
+	ID                  int    `json:"id,omitempty"`
 	Links               Links  `json:"links,omitempty"`
 	RefName             string `json:"refName,omitempty"`
 	RuleType            string `json:"ruleType,omitempty"`
