@@ -183,18 +183,6 @@ func (r *SuiteqlPostResponseBody) ToLocations(client *Client) (Locations, error)
 	return items, err
 }
 
-func (r *SuiteqlPostResponseBody) ToCreditMemoTransactions(client *Client) (CreditMemoTransactions, error) {
-	items := CreditMemoTransactions{}
-
-	reader := bytes.NewReader(r.Items)
-	dec := json.NewDecoder(reader)
-	if client.disallowUnknownFields {
-		dec.DisallowUnknownFields()
-	}
-	err := dec.Decode(&items)
-	return items, err
-}
-
 func (r SuiteqlPostResponseBody) ToSalesTaxItems(client *Client) (SalesTaxItems, error) {
 	items := SalesTaxItems{}
 
@@ -207,8 +195,8 @@ func (r SuiteqlPostResponseBody) ToSalesTaxItems(client *Client) (SalesTaxItems,
 	return items, err
 }
 
-func (r *SuiteqlPostResponseBody) ToInvoiceTransactions(client *Client) (InvoiceTransactions, error) {
-	items := InvoiceTransactions{}
+func (r *SuiteqlPostResponseBody) ToSuiteQLTransactions(client *Client) (SuiteQLTransactions, error) {
+	items := SuiteQLTransactions{}
 
 	reader := bytes.NewReader(r.Items)
 	dec := json.NewDecoder(reader)
