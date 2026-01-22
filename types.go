@@ -1139,10 +1139,27 @@ type Location struct {
 	Name                   string `json:"name,omitzero"`
 	Subsidiary             string `json:"subsidiary,omitzero"`
 	Externalid             string `json:"externalid,omitempty"`
+
+	CustomFields map[string]any `json:"-"`
 }
 
 func (l Location) IsZero() bool {
 	return zero.IsZero(l)
+}
+
+func (l Location) MarshalJSON() ([]byte, error) {
+	type Alias Location
+	return MarshalCustomFields(Alias(l), l.CustomFields)
+}
+
+func (l *Location) UnmarshalJSON(data []byte) error {
+	err := UnmarshalCustomFields(data, &l.CustomFields)
+	if err != nil {
+		return err
+	}
+
+	type Alias Location
+	return json.Unmarshal(data, (*Alias)(l))
 }
 
 // known Transaction record types:
