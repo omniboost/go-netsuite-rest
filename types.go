@@ -593,7 +593,7 @@ type CreditMemo struct {
 	CreatedDate                   Date           `json:"createdDate,omitzero"`
 	CreatedFrom                   NSResource     `json:"createdFrom,omitzero"`
 	Currency                      Currency       `json:"currency,omitzero"`
-	CustomForm                    NSResource     `json:"customForm"`
+	CustomForm                    NSResource     `json:"customForm,omitzero"`
 	DefaultILBAShipAddrVal        string         `json:"defaultILBAShipAddrVal,omitempty"`
 	DefaultILBAShippingAddressKey string         `json:"defaultILBAShippingAddressKey,omitempty"`
 	DefaultILShipMethKey          int64          `json:"defaultILShipMethKey,omitzero"`
@@ -614,7 +614,7 @@ type CreditMemo struct {
 	DueDate         Date       `json:"dueDate,omitzero"`
 	Email           string     `json:"email,omitempty"`
 	EndDate         Date       `json:"endDate,omitzero"`
-	Entity          NSResource `json:"entity"`
+	Entity          NSResource `json:"entity,omitzero"`
 	EntityTaxRegNum string     `json:"entityTaxRegNum,omitempty"`
 	// Estimated Gross Profit: Read-only field that equals the revenue amount minus the Est. Cost. At the transaction level, it equals the gross profit of all lines, factoring transaction-level discounts and markups.
 	EstGrossProfit float64 `json:"estGrossProfit,omitempty"`
