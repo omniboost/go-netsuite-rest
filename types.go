@@ -564,7 +564,7 @@ type CreditMemo struct {
 	AppliedRules AppliedRulesCollection `json:"appliedRules,omitzero"`
 	Apply        ApplyCollection        `json:"apply,omitzero"`
 	// Type an as of date for this customer credit.
-	AsOfDate  Date   `json:"asOfDate,omitempty"`
+	AsOfDate  Date   `json:"asOfDate,omitzero"`
 	BillAddr1 string `json:"billAddr1,omitempty"`
 	BillAddr2 string `json:"billAddr2,omitempty"`
 	BillAddr3 string `json:"billAddr3,omitempty"`
