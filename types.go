@@ -786,7 +786,8 @@ type CreditMemo struct {
 }
 
 func (c CreditMemo) MarshalJSON() ([]byte, error) {
-	return omitempty.MarshalJSON(c)
+	type Alias CreditMemo
+	return MarshalCustomFields(Alias(c), c.CustomFields)
 }
 
 func (c *CreditMemo) UnmarshalJSON(data []byte) error {
