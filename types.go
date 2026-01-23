@@ -771,7 +771,7 @@ type CreditMemo struct {
 	// wish, you can type another number. The next credit memo number will
 	// revert to the standard pattern. You can enter a maximum of 45 characters
 	// in this field.
-	TranId           string  `json:"tranId,omitempty"`
+	TranID           string  `json:"tranId,omitempty"`
 	TranIsVsoeBundle bool    `json:"tranIsVsoeBundle,omitzero"`
 	Unapplied        float64 `json:"unapplied,omitempty"`
 	// The VSOE allocation amount can be calculated automatically by
