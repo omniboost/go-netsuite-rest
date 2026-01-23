@@ -412,18 +412,18 @@ type Invoice struct {
 	// 	Items        []interface{} `json:"items"`
 	// 	TotalResults int           `json:"totalResults"`
 	// } `json:"accountingBookDetail"`
-	AmountPaid              float64 `json:"amountPaid"`
-	AmountRemaining         float64 `json:"amountRemaining"`
-	AmountRemainingTotalBox float64 `json:"amountRemainingTotalBox"`
-	BillAddress             string  `json:"billAddress"`
-	BillingAddress          Address `json:"billingAddress"`
-	BillingAddressText      string  `json:"billingAddress_text"`
-	CreatedDate             Date    `json:"createdDate"`
+	AmountPaid              float64 `json:"amountPaid,omitzero"`
+	AmountRemaining         float64 `json:"amountRemaining,omitzero"`
+	AmountRemainingTotalBox float64 `json:"amountRemainingTotalBox,omitzero"`
+	BillAddress             string  `json:"billAddress,omitzero"`
+	BillingAddress          Address `json:"billingAddress,omitzero"`
+	BillingAddressText      string  `json:"billingAddress_text,omitzero"`
+	CreatedDate             Date    `json:"createdDate,omitzero"`
 	Currency                struct {
 		Links   Links  `json:"links"`
 		ID      string `json:"id"`
 		RefName string `json:"refName"`
-	} `json:"currency"`
+	} `json:"currency,omitzero"`
 	// CustbodyAtlasExistCustHdn struct {
 	// 	Links   Links  `json:"links"`
 	// 	ID      string `json:"id"`
@@ -473,16 +473,16 @@ type Invoice struct {
 		Links   Links  `json:"links,omitzero"`
 		ID      string `json:"id"`
 		RefName string `json:"refName,omitempty"`
-	} `json:"entity"`
+	} `json:"entity,omitzero"`
 	// EstGrossProfit         float64     `json:"estGrossProfit"`
 	// EstGrossProfitPercent  float64     `json:"estGrossProfitPercent"`
 	// ExchangeRate           float64     `json:"exchangeRate"`
 	// ExcludeFromGLNumbering Bool        `json:"excludeFromGLNumbering"`
 	ID   string                `json:"id,omitempty"`
-	Item InvoiceItemCollection `json:"item"`
+	Item InvoiceItemCollection `json:"item,omitzero"`
 	// LastModifiedDate       Date        `json:"lastModifiedDate"`
-	Location Location `json:"location"`
-	Memo     string   `json:"memo"`
+	Location Location `json:"location,omitzero"`
+	Memo     string   `json:"memo,omitzero"`
 	// Nexus struct {
 	// 	Links   Links  `json:"links"`
 	// 	ID      string `json:"id"`
@@ -503,7 +503,7 @@ type Invoice struct {
 	// 	ID      string `json:"id"`
 	// 	RefName string `json:"refName"`
 	// } `json:"status"`
-	Subsidiary          Subsidiary `json:"subsidiary"`
+	Subsidiary          Subsidiary `json:"subsidiary,omitzero"`
 	SubsidiaryTaxRegNum string     `json:"subsidiaryTaxRegNum,omitempty"`
 	Subtotal            float64    `json:"subtotal,omitempty"`
 	// TaxDetails           InvoiceTaxDetails `json:"taxDetails,omitempty"`
@@ -512,14 +512,14 @@ type Invoice struct {
 	// TaxPointDateOverride Bool    `json:"taxPointDateOverride"`
 	// TaxRegOverride       Bool    `json:"taxRegOverride"`
 	// TaxTotal             float64 `json:"taxTotal"`
-	ToBeEmailed Bool    `json:"toBeEmailed"`
-	ToBeFaxed   Bool    `json:"toBeFaxed"`
-	ToBePrinted Bool    `json:"toBePrinted"`
-	Total       float64 `json:"total"`
+	ToBeEmailed Bool    `json:"toBeEmailed,omitzero"`
+	ToBeFaxed   Bool    `json:"toBeFaxed,omitzero"`
+	ToBePrinted Bool    `json:"toBePrinted,omitzero"`
+	Total       float64 `json:"total,omitzero"`
 	// TotalAfterTaxes      float64 `json:"totalAfterTaxes"`
 	// TotalCostEstimate    float64 `json:"totalCostEstimate"`
-	TranDate   Date      `json:"tranDate"`
-	TranID     string    `json:"tranId"`
+	TranDate   Date      `json:"tranDate,omitzero"`
+	TranID     string    `json:"tranId,omitzero"`
 	Department RecordRef `json:"Department,omitzero"`
 	Class      RecordRef `json:"Class,omitzero"`
 
