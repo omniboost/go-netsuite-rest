@@ -1,7 +1,9 @@
 package utils
 
 import (
+	"bytes"
 	"fmt"
+	"html/template"
 	"net/http"
 	"net/url"
 	"reflect"
@@ -106,4 +108,18 @@ func NewSchemaEncoder() *schema.Encoder {
 	encoder.RegisterEncoder(null.Float{}, encodeNullFloat)
 	encoder.RegisterEncoder(null.Bool{}, encodeNullBool)
 	return encoder
+}
+
+func AddAccountIDToURL(companyID string, u string) string {
+	tmpl, err := template.New("host").Parse(u)
+	if err != nil {
+		return u
+	}
+	buf := new(bytes.Buffer)
+	err = tmpl.Execute(buf, map[string]interface{}{"account_id": companyID})
+	if err != nil {
+		return u
+	}
+
+	return buf.String()
 }

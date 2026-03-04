@@ -6,7 +6,10 @@ import (
 	"os"
 	"testing"
 
+	"github.com/golang-jwt/jwt/v5"
 	netsuite "github.com/omniboost/go-netsuite-rest"
+	"github.com/omniboost/go-netsuite-rest/utils"
+	jwtassertion "github.com/omniboost/oauth-jwtassertion"
 	"golang.org/x/oauth2"
 )
 
@@ -49,6 +52,31 @@ func TestMain(m *testing.M) {
 		httpClient := oauthConfig.Client(context.Background(), token)
 
 		client = netsuite.NewClient(httpClient)
+		client.SetCompanyID(companyID)
+	} else if authType == "m2m" {
+		privKey, err := jwtassertion.LoadPrivateKey([]byte(os.Getenv("PRIVATE_KEY")))
+		if err != nil {
+			log.Fatal("loading private key:", err)
+			return
+		}
+
+		cfg := &jwtassertion.Config{
+			OAuth2: &oauth2.Config{
+				ClientID: clientID,
+				Endpoint: oauth2.Endpoint{
+					TokenURL: utils.AddAccountIDToURL(companyID, "https://{{.account_id}}.suitetalk.api.netsuite.com/services/rest/auth/oauth2/v1/token"),
+				},
+				Scopes: []string{
+					"restlets",
+					"rest_webservices",
+				},
+			},
+			PrivKey:       privKey,
+			KeyID:         os.Getenv("CERTIFICATE_ID"), // optional
+			SigningMethod: jwt.SigningMethodPS256,
+		}
+
+		client = netsuite.NewClient(cfg.Client(context.Background()))
 		client.SetCompanyID(companyID)
 	} else if authType == "token" {
 		client.SetUseTokenAuth(true)
