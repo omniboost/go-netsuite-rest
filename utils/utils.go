@@ -111,6 +111,10 @@ func NewSchemaEncoder() *schema.Encoder {
 }
 
 func AddAccountIDToURL(companyID string, u string) string {
+	// make sure companyID confers to expected format
+	companyID = strings.ToLower(companyID)
+	companyID = strings.ReplaceAll(companyID, "_", "-")
+
 	tmpl, err := template.New("host").Parse(u)
 	if err != nil {
 		return u
