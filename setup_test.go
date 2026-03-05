@@ -61,7 +61,7 @@ func TestMain(m *testing.M) {
 		}
 
 		cfg := &jwtassertion.Config{
-			OAuth2: &oauth2.Config{
+			Config: &oauth2.Config{
 				ClientID: clientID,
 				Endpoint: oauth2.Endpoint{
 					TokenURL: utils.AddAccountIDToURL(companyID, "https://{{.account_id}}.suitetalk.api.netsuite.com/services/rest/auth/oauth2/v1/token"),
