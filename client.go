@@ -393,6 +393,10 @@ func (c *Client) Do(req *http.Request, body interface{}) (*http.Response, error)
 		return httpResp, errResp
 	}
 
+	if httpResp.StatusCode != 0 && (httpResp.StatusCode < 200 || httpResp.StatusCode > 299) {
+		return httpResp, &httperr.Error{StatusCode: httpResp.StatusCode, Err: errors.New(httpResp.Status)}
+	}
+
 	return httpResp, nil
 }
 
