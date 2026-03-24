@@ -1,6 +1,7 @@
 package netsuite
 
 import (
+	"bufio"
 	"bytes"
 	"context"
 	"encoding/json"
@@ -16,9 +17,11 @@ import (
 	"strings"
 	"text/template"
 	"time"
+	"unicode"
+	"unicode/utf8"
 
 	httperr "github.com/omniboost/go-httperr"
-	"github.com/pkg/errors"
+	"gitlab.com/tozd/go/errors"
 )
 
 const (
@@ -368,7 +371,7 @@ func (c *Client) Do(req *http.Request, body interface{}) (*http.Response, error)
 	}
 
 	// check if the response isn't an error
-	err = CheckResponse(httpResp)
+	err = checkContentType(httpResp)
 	if err != nil {
 		return httpResp, err
 	}
@@ -386,10 +389,19 @@ func (c *Client) Do(req *http.Request, body interface{}) (*http.Response, error)
 		return httpResp, nil
 	}
 
+	// read 512 bytes without draining the response body we may perhaps later
+	// use for error handling
+	peeked, _ := peek(httpResp, 512)
+
 	errResp := &ErrorResponse{Response: httpResp}
 	err = c.Unmarshal(httpResp.Body, body, errResp)
 	if err != nil {
-		return httpResp, err
+		// only return error when its not a json syntax error, otherwise we
+		// assume the response body is not json and ignore it
+		syntaxErr := &json.SyntaxError{}
+		if !errors.As(err, &syntaxErr) {
+			return httpResp, err
+		}
 	}
 
 	if errResp.Error() != "" {
@@ -397,6 +409,10 @@ func (c *Client) Do(req *http.Request, body interface{}) (*http.Response, error)
 	}
 
 	if httpResp.StatusCode != 0 && (httpResp.StatusCode < 200 || httpResp.StatusCode > 299) {
+		// here the original response body could be just text
+		if isPlainText(peeked) {
+			return httpResp, errors.New(string(peeked))
+		}
 		return httpResp, &httperr.Error{StatusCode: httpResp.StatusCode, Err: errors.New(httpResp.Status)}
 	}
 
@@ -429,77 +445,11 @@ func (c *Client) Unmarshal(r io.Reader, vv ...interface{}) error {
 	}
 
 	if len(errs) == len(vv) {
-		// Everything errored
-		msgs := make([]string, len(errs))
-		for i, e := range errs {
-			msgs[i] = fmt.Sprint(e)
-		}
-		return errors.New(strings.Join(msgs, ", "))
+		return errors.Join(errs...)
 	}
 
 	return nil
 }
-
-// CheckResponse checks the Client response for errors, and returns them if
-// present. A response is considered an error if it has a status code outside
-// the 200 range. Client error responses are expected to have either no response
-// body, or a json response body that maps to ErrorResponse. Any other response
-// body will be silently ignored.
-func CheckResponse(r *http.Response) error {
-	errorResponse := &ErrorResponse{Response: r}
-
-	// Don't check content-lenght: a created response, for example, has no body
-	// if r.Header.Get("Content-Length") == "0" {
-	// 	errorResponse.Errors.Message = r.Status
-	// 	return errorResponse
-	// }
-
-	if c := r.StatusCode; c >= 200 && c <= 299 {
-		return nil
-	}
-
-	// read data and copy it back
-	data, err := ioutil.ReadAll(r.Body)
-	r.Body = ioutil.NopCloser(bytes.NewReader(data))
-	if err != nil {
-		return errorResponse
-	}
-
-	err = checkContentType(r)
-	if err != nil {
-		return errors.WithStack(err)
-	}
-
-	if r.ContentLength == 0 {
-		return errors.New("response body is empty")
-	}
-
-	// convert json to struct
-	if len(data) != 0 {
-		err = json.Unmarshal(data, &errorResponse)
-		if err != nil {
-			return errors.WithStack(err)
-		}
-	}
-
-	if errorResponse.Error() != "" {
-		return errorResponse
-	}
-
-	return nil
-}
-
-// {
-//   "type": "https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4",
-//   "title": "Forbidden",
-//   "status": 403,
-//   "o:errorDetails": [
-//     {
-//       "detail": "The account record is only available as a beta record. Enable the REST Record Service (Beta) feature in Setup > Company > Enable Features to work with this record.",
-//       "o:errorCode": "INSUFFICIENT_PERMISSION"
-//     }
-//   ]
-// }
 
 type ErrorResponse struct {
 	// HTTP response that caused this error
@@ -578,4 +528,27 @@ func (c *Client) NewSignatureGenerator(r *http.Request) *SignatureGenerator {
 	// 	Version:           "1.0",
 	// 	Timestamp:         1508242306,
 	// }
+}
+
+func isPlainText(b []byte) bool {
+	s := bytes.TrimSpace(b)
+	return utf8.Valid(s) && bytes.IndexFunc(s, func(r rune) bool {
+		return !unicode.IsLetter(r) &&
+			!unicode.IsDigit(r) &&
+			!unicode.IsSpace(r) &&
+			!strings.ContainsRune(`.,!?;:'"()-_/\@#%&*+=`, r)
+	}) == -1
+}
+
+func peek(resp *http.Response, n int) ([]byte, error) {
+	br := bufio.NewReaderSize(resp.Body, n)
+	peeked, err := br.Peek(n)
+	if err != nil && err != io.EOF && err != bufio.ErrBufferFull {
+		return nil, err
+	}
+
+	// Replace the response body with the buffered reader
+	resp.Body = io.NopCloser(br)
+
+	return peeked, nil
 }

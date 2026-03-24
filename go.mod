@@ -1,6 +1,6 @@
 module github.com/omniboost/go-netsuite-rest
 
-go 1.25.3
+go 1.26
 
 require (
 	github.com/cydev/zero v0.0.0-20160322155811-4a4535dd56e7
@@ -13,5 +13,7 @@ require (
 )
 
 require github.com/golang-jwt/jwt/v5 v5.3.1
+
+require gitlab.com/tozd/go/errors v0.11.1 // indirect
 
 replace github.com/gorilla/schema => github.com/omniboost/schema v1.1.1-0.20191030093734-a170fe1a7240
