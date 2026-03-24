@@ -344,8 +344,11 @@ func (c *Client) Do(req *http.Request, body interface{}) (*http.Response, error)
 
 	httpResp, err := c.http.Do(req)
 	if err != nil {
-		// wrap error in http error so we can handle it properly
-		return nil, &httperr.Error{StatusCode: httpResp.StatusCode, Err: err}
+		if httpResp != nil {
+			// wrap error in http error so we can handle it properly
+			return nil, &httperr.Error{StatusCode: httpResp.StatusCode, Err: err}
+		}
+		return nil, errors.WithStack(err)
 	}
 
 	if c.onRequestCompleted != nil {
