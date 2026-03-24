@@ -2098,3 +2098,30 @@ type AddressBookElement struct {
 	Links                  Links   `json:"links,omitempty"`
 	RefName                string  `json:"refName,omitempty"`
 }
+
+type Certificates []Certificate
+
+type Certificate struct {
+	Application struct {
+		ID            int    `json:"id"`
+		Name          string `json:"name"`
+		URL           string `json:"url"`
+		ApplicationID string `json:"application_id"`
+	} `json:"application"`
+	Entity struct {
+		ID   int    `json:"id"`
+		Name string `json:"name"`
+		URL  string `json:"url"`
+	} `json:"entity"`
+	Role struct {
+		ID   int    `json:"id"`
+		Name string `json:"name"`
+		URL  string `json:"url"`
+	} `json:"role"`
+	Created       Date   `json:"created"`
+	ValidFrom     Date   `json:"valid_from"`
+	ValidUntil    Date   `json:"valid_until"`
+	Revoked       bool   `json:"revoked"`
+	CertificateID string `json:"certificate_id"`
+	Algorithm     string `json:"algorithm"`
+}
