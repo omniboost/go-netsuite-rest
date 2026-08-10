@@ -11,6 +11,10 @@ var prefixes = []string{
 	"custcol_",
 	"custentity_",
 	"custrecord_",
+	// custom segments: no trailing underscore since NetSuite's default
+	// auto-generated segment script ids are just "cseg" + a number (e.g.
+	// "cseg1"), not always "cseg_something".
+	"cseg",
 }
 
 func UnmarshalCustomFields(data []byte, v any) error {

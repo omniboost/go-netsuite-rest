@@ -132,3 +132,64 @@ func TestJournalEntryCustomFieldsMarshalling(t *testing.T) {
 		t.Errorf("Expected BillAddress to be %s, got %s", result.BillAddress, unmarshalledResult.BillAddress)
 	}
 }
+
+// TestJournalEntryLineCustomSegmentRoundTrip verifies that a custom segment
+// field on a journal entry line (e.g. "cseg1", NetSuite's default
+// auto-generated segment script id - no trailing underscore, unlike
+// custbody_/custcol_/etc.) round-trips through CustomFields like any other
+// custom field.
+func TestJournalEntryLineCustomSegmentRoundTrip(t *testing.T) {
+	jsonData := `{
+		"memo": "test line",
+		"debit": 10,
+		"cseg1": {
+			"id": "1",
+			"refName": "TEST_VALUE_1"
+		}
+	}`
+
+	var result netsuite.JournalEntryLineElement
+	err := json.Unmarshal([]byte(jsonData), &result)
+	if err != nil {
+		t.Fatalf("Failed to unmarshal JSON: %v", err)
+	}
+
+	if len(result.CustomFields) != 1 {
+		t.Fatalf("Expected 1 custom field, got %d", len(result.CustomFields))
+	}
+
+	segment, ok := result.CustomFields["cseg1"].(map[string]any)
+	if !ok {
+		t.Fatalf("Expected cseg1 to be an object, got %T", result.CustomFields["cseg1"])
+	}
+	if segment["id"] != "1" || segment["refName"] != "TEST_VALUE_1" {
+		t.Errorf("Expected cseg1 to be {id: 1, refName: TEST_VALUE_1}, got %v", segment)
+	}
+
+	if result.Memo != "test line" {
+		t.Errorf("Expected Memo to be 'test line', got %s", result.Memo)
+	}
+	if result.Debit != 10 {
+		t.Errorf("Expected Debit to be 10, got %f", result.Debit)
+	}
+
+	// and back out again
+	b, err := json.Marshal(result)
+	if err != nil {
+		t.Fatalf("Failed to marshal JSON: %v", err)
+	}
+
+	var roundTripped netsuite.JournalEntryLineElement
+	err = json.Unmarshal(b, &roundTripped)
+	if err != nil {
+		t.Fatalf("Failed to unmarshal round-tripped JSON: %v", err)
+	}
+
+	roundTrippedSegment, ok := roundTripped.CustomFields["cseg1"].(map[string]any)
+	if !ok {
+		t.Fatalf("Expected round-tripped cseg1 to be an object, got %T", roundTripped.CustomFields["cseg1"])
+	}
+	if roundTrippedSegment["id"] != "1" {
+		t.Errorf("Expected round-tripped cseg1.id to be 1, got %v", roundTrippedSegment["id"])
+	}
+}

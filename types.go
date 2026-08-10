@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 
 	"github.com/cydev/zero"
-	"github.com/omniboost/go-netsuite-rest/omitempty"
 )
 
 type JournalEntry struct {
@@ -46,23 +45,23 @@ type JournalEntry struct {
 	TranID               string           `json:"tranId,omitempty"`
 	Void                 bool             `json:"void,omitempty"`
 
-	CustomFields map[string]NSResource `json:"-"`
+	CustomFields map[string]any `json:"-"`
 }
 
-// func (j JournalEntry) MarshalJSON() ([]byte, error) {
-// 	// TODO: implement marshalling of cust bodies & cols
-// 	return omitempty.MarshalJSON(j)
-// }
+func (j JournalEntry) MarshalJSON() ([]byte, error) {
+	type Alias JournalEntry
+	return MarshalCustomFields(Alias(j), j.CustomFields)
+}
 
-// func (j *JournalEntry) UnmarshalJSON(data []byte) error {
-// 	data, err := UnmarshalCustomFields(data, j.CustomFields)
-// 	if err != nil {
-// 		return err
-// 	}
-//
-// 	type Alias JournalEntry
-// 	return json.Unmarshal(data, (*Alias)(j))
-// }
+func (j *JournalEntry) UnmarshalJSON(data []byte) error {
+	err := UnmarshalCustomFields(data, &j.CustomFields)
+	if err != nil {
+		return err
+	}
+
+	type Alias JournalEntry
+	return json.Unmarshal(data, (*Alias)(j))
+}
 
 func (j JournalEntry) IsZero() bool {
 	return zero.IsZero(j)
@@ -271,10 +270,23 @@ type JournalEntryLineElement struct {
 	TaxAccount             TaxAccount `json:"taxAccount,omitzero"`
 	TaxBasis               float64    `json:"taxBasis,omitempty"`
 	TotalAmount            float64    `json:"totalAmount,omitempty"`
+
+	CustomFields map[string]any `json:"-"`
 }
 
 func (j JournalEntryLineElement) MarshalJSON() ([]byte, error) {
-	return omitempty.MarshalJSON(j)
+	type Alias JournalEntryLineElement
+	return MarshalCustomFields(Alias(j), j.CustomFields)
+}
+
+func (j *JournalEntryLineElement) UnmarshalJSON(data []byte) error {
+	err := UnmarshalCustomFields(data, &j.CustomFields)
+	if err != nil {
+		return err
+	}
+
+	type Alias JournalEntryLineElement
+	return json.Unmarshal(data, (*Alias)(j))
 }
 
 type Accounts []Account
