@@ -1,6 +1,7 @@
 package netsuite_test
 
 import (
+	"context"
 	"encoding/json"
 	"log"
 	"testing"
@@ -11,7 +12,7 @@ func TestCustomerGet(t *testing.T) {
 	req.PathParams().ID = 70202
 	// req.QueryParams().Fields = netsuite.Fields{"line"}
 	req.QueryParams().ExpandSubResources = true
-	resp, err := req.Do()
+	resp, err := req.Do(context.Background())
 	if err != nil {
 		t.Error(err)
 	}

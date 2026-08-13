@@ -1,6 +1,7 @@
 package netsuite_test
 
 import (
+	"context"
 	"encoding/json"
 	"log"
 	"testing"
@@ -26,7 +27,7 @@ func TestCustom(t *testing.T) {
 	}
 	req.SetRequestBody(c)
 
-	resp, err := req.Do()
+	resp, err := req.Do(context.Background())
 	if err != nil {
 		t.Error(err)
 	}

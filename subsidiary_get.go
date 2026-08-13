@@ -1,6 +1,7 @@
 package netsuite
 
 import (
+	"context"
 	"net/http"
 	"net/url"
 
@@ -120,9 +121,9 @@ func (r *SubsidiaryGetRequest) URL() (*url.URL, error) {
 	return &u, err
 }
 
-func (r *SubsidiaryGetRequest) Do() (SubsidiaryGetResponseBody, error) {
+func (r *SubsidiaryGetRequest) Do(ctx context.Context) (SubsidiaryGetResponseBody, error) {
 	// Create http request
-	req, err := r.client.NewRequest(nil, r)
+	req, err := r.client.NewRequest(ctx, r)
 	if err != nil {
 		return *r.NewResponseBody(), err
 	}

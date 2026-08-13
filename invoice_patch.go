@@ -1,6 +1,7 @@
 package netsuite
 
 import (
+	"context"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -120,9 +121,9 @@ func (r *InvoicePatchRequest) URL() (*url.URL, error) {
 	return &u, err
 }
 
-func (r *InvoicePatchRequest) Do() (InvoicePatchResponseBody, error) {
+func (r *InvoicePatchRequest) Do(ctx context.Context) (InvoicePatchResponseBody, error) {
 	// Create http request
-	req, err := r.client.NewRequest(nil, r)
+	req, err := r.client.NewRequest(ctx, r)
 	if err != nil {
 		return *r.NewResponseBody(), err
 	}

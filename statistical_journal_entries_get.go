@@ -1,6 +1,7 @@
 package netsuite
 
 import (
+	"context"
 	"net/http"
 	"net/url"
 
@@ -114,9 +115,9 @@ func (r *StatisticalJournalEntriesGetRequest) URL() (*url.URL, error) {
 	return &u, err
 }
 
-func (r *StatisticalJournalEntriesGetRequest) Do() (StatisticalJournalEntriesGetResponseBody, error) {
+func (r *StatisticalJournalEntriesGetRequest) Do(ctx context.Context) (StatisticalJournalEntriesGetResponseBody, error) {
 	// Create http request
-	req, err := r.client.NewRequest(nil, r)
+	req, err := r.client.NewRequest(ctx, r)
 	if err != nil {
 		return *r.NewResponseBody(), err
 	}

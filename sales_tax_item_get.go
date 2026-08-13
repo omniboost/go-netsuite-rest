@@ -1,6 +1,7 @@
 package netsuite
 
 import (
+	"context"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -121,9 +122,9 @@ func (r *SalesTaxItemGetRequest) URL() (*url.URL, error) {
 	return &u, err
 }
 
-func (r *SalesTaxItemGetRequest) Do() (SalesTaxItemGetResponseBody, error) {
+func (r *SalesTaxItemGetRequest) Do(ctx context.Context) (SalesTaxItemGetResponseBody, error) {
 	// Create http request
-	req, err := r.client.NewRequest(nil, r)
+	req, err := r.client.NewRequest(ctx, r)
 	if err != nil {
 		return *r.NewResponseBody(), err
 	}
@@ -138,4 +139,3 @@ func (r *SalesTaxItemGetRequest) Do() (SalesTaxItemGetResponseBody, error) {
 	_, err = r.client.Do(req, responseBody)
 	return *responseBody, err
 }
-

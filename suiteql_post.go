@@ -2,6 +2,7 @@ package netsuite
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/url"
@@ -248,9 +249,9 @@ func (r *SuiteqlPostRequest) URL() (*url.URL, error) {
 	return &u, err
 }
 
-func (r *SuiteqlPostRequest) Do() (SuiteqlPostResponseBody, error) {
+func (r *SuiteqlPostRequest) Do(ctx context.Context) (SuiteqlPostResponseBody, error) {
 	// Create http request
-	req, err := r.client.NewRequest(nil, r)
+	req, err := r.client.NewRequest(ctx, r)
 	if err != nil {
 		return *r.NewResponseBody(), err
 	}

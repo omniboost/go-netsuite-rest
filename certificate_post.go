@@ -1,6 +1,7 @@
 package netsuite
 
 import (
+	"context"
 	"net/http"
 	"net/url"
 
@@ -93,9 +94,9 @@ type CertificatePostRequestBody struct {
 	// The value of the parameter is the certificate you want to set up.
 	FileContent string `json:"fileContent"`
 	// The value of the parameter is the ID of the role for which you want to activate the certificate.
-	Role        int    `json:"role"`
+	Role int `json:"role"`
 	// The value of the parameter is the ID of the entity for which you want to activate the certificate.
-	Entity      int    `json:"entity"`
+	Entity int `json:"entity"`
 }
 
 func (r *CertificatePostRequest) RequestBody() *CertificatePostRequestBody {
@@ -122,9 +123,9 @@ func (r *CertificatePostRequest) URL() (*url.URL, error) {
 	return &u, err
 }
 
-func (r *CertificatePostRequest) Do() (CertificatePostResponseBody, error) {
+func (r *CertificatePostRequest) Do(ctx context.Context) (CertificatePostResponseBody, error) {
 	// Create http request
-	req, err := r.client.NewRequest(nil, r)
+	req, err := r.client.NewRequest(ctx, r)
 	if err != nil {
 		return *r.NewResponseBody(), err
 	}

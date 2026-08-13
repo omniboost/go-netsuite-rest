@@ -1,6 +1,7 @@
 package netsuite_test
 
 import (
+	"context"
 	"encoding/json"
 	"log"
 	"testing"
@@ -13,7 +14,7 @@ func TestJournalEntryLineGet(t *testing.T) {
 	for _, i := range []int{0, 1} {
 		req.PathParams().JournalEntryLineNo = i
 		// req.QueryParams().Fields = netsuite.Fields{"line"}
-		resp, err := req.Do()
+		resp, err := req.Do(context.Background())
 		if err != nil {
 			t.Error(err)
 		}

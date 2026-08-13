@@ -1,6 +1,7 @@
 package netsuite
 
 import (
+	"context"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -113,10 +114,7 @@ func (r *JournalEntryLinesGetRequest) NewResponseBody() *JournalEntryLinesGetRes
 type JournalEntryLinesGetResponseBody struct {
 	Links Links `json:"links"`
 	Items []struct {
-		Links []struct {
-			Rel  string `json:"rel"`
-			Href string `json:"href"`
-		} `json:"links"`
+		Links Links `json:"links"`
 	} `json:"items"`
 	TotalResults int `json:"totalResults"`
 }
@@ -126,9 +124,9 @@ func (r *JournalEntryLinesGetRequest) URL() (*url.URL, error) {
 	return &u, err
 }
 
-func (r *JournalEntryLinesGetRequest) Do() (JournalEntryLinesGetResponseBody, error) {
+func (r *JournalEntryLinesGetRequest) Do(ctx context.Context) (JournalEntryLinesGetResponseBody, error) {
 	// Create http request
-	req, err := r.client.NewRequest(nil, r)
+	req, err := r.client.NewRequest(ctx, r)
 	if err != nil {
 		return *r.NewResponseBody(), err
 	}
