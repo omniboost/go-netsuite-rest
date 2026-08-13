@@ -14,6 +14,10 @@ require (
 
 require github.com/golang-jwt/jwt/v5 v5.3.1
 
-require gitlab.com/tozd/go/errors v0.11.1 // indirect
+require gitlab.com/tozd/go/errors v0.11.1
 
-replace github.com/gorilla/schema => github.com/omniboost/schema v1.1.1-0.20191030093734-a170fe1a7240
+// The fork adds the encoder hooks utils.NewSchemaEncoder relies on. The
+// revision this pinned before, a170fe1a7240, is no longer on the remote, so a
+// build from a clean module cache failed with "unknown revision"; this is the
+// fork's current master.
+replace github.com/gorilla/schema => github.com/omniboost/schema v1.1.1-0.20211111150515-2e872025e306
