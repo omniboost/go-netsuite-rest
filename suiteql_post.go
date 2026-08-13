@@ -118,7 +118,7 @@ type SuiteqlPostResponseBody struct {
 	Links        Links           `json:"links"`
 	Count        int             `json:"count"`
 	HasMore      bool            `json:"hasMore"`
-	Items        json.RawMessage `json::"items"`
+	Items        json.RawMessage `json:"items"`
 	Offset       int             `json:"offset"`
 	TotalResults int             `json:"totalResults"`
 }
@@ -205,6 +205,18 @@ func (r *SuiteqlPostResponseBody) ToSuiteQLTransactions(client *Client) (SuiteQL
 	}
 	err := dec.Decode(&items)
 	return items, err
+}
+
+func (r SuiteqlPostResponseBody) ToSubsidiaries(client *Client) (SQLSubsidiaries, error) {
+	subsidiaries := SQLSubsidiaries{}
+
+	reader := bytes.NewReader(r.Items)
+	dec := json.NewDecoder(reader)
+	if client.disallowUnknownFields {
+		dec.DisallowUnknownFields()
+	}
+	err := dec.Decode(&subsidiaries)
+	return subsidiaries, err
 }
 
 func (r SuiteqlPostResponseBody) ToNexuses(client *Client) (SQLNexuses, error) {
