@@ -102,6 +102,9 @@ func (dt *DateTime) UnmarshalJSON(text []byte) (err error) {
 
 type Bool bool
 
+// UnmarshalJSON accepts a JSON boolean, which the record endpoints return, and
+// the "T"/"F" strings SuiteQL returns for the same columns. Null and the empty
+// string leave the value at false.
 func (b *Bool) UnmarshalJSON(text []byte) (err error) {
 	var bl bool
 	err = json.Unmarshal(text, &bl)
@@ -112,17 +115,20 @@ func (b *Bool) UnmarshalJSON(text []byte) (err error) {
 
 	var str string
 	err = json.Unmarshal(text, &str)
-	if err == nil {
-		return nil
+	if err != nil {
+		return errors.Errorf("cannot unmarshal %s into a bool", string(text))
 	}
 
-	if str == "" {
+	switch str {
+	case "":
 		return nil
-	}
-
-	if str == "F" {
+	case "T", "t", "true":
+		*b = true
+		return nil
+	case "F", "f", "false":
 		*b = false
+		return nil
 	}
 
-	return errors.New("FML")
+	return errors.Errorf("cannot unmarshal %q into a bool", str)
 }
