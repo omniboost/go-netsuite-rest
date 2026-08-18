@@ -1,6 +1,7 @@
 package netsuite
 
 import (
+	"context"
 	"net/http"
 	"net/url"
 
@@ -107,15 +108,12 @@ func (r *TaxTypesGetRequest) NewResponseBody() *TaxTypeGetResponseBody {
 }
 
 type TaxTypeGetResponseBody struct {
-	Links Links `json:"links"`
-	Count int   `json:"count"`
+	Links   Links `json:"links"`
+	Count   int   `json:"count"`
 	HasMore bool  `json:"hasMore"`
 	Items   []struct {
-		Links []struct {
-			Rel  string `json:"rel"`
-			Href string `json:"href"`
-		} `json:"links"`
-		ID string `json:"id"`
+		Links Links  `json:"links"`
+		ID    string `json:"id"`
 	} `json:"items"`
 	Offset       int `json:"offset"`
 	TotalResults int `json:"totalResults"`
@@ -126,9 +124,9 @@ func (r *TaxTypesGetRequest) URL() (*url.URL, error) {
 	return &u, err
 }
 
-func (r *TaxTypesGetRequest) Do() (TaxTypeGetResponseBody, error) {
+func (r *TaxTypesGetRequest) Do(ctx context.Context) (TaxTypeGetResponseBody, error) {
 	// Create http request
-	req, err := r.client.NewRequest(nil, r)
+	req, err := r.client.NewRequest(ctx, r)
 	if err != nil {
 		return *r.NewResponseBody(), err
 	}

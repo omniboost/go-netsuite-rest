@@ -268,7 +268,11 @@ func (c *Client) NewRequest(ctx context.Context, req Request) (*http.Request, er
 		return nil, err
 	}
 
-	r, err := http.NewRequest(req.Method(), u.String(), buf)
+	if ctx == nil {
+		ctx = context.Background()
+	}
+
+	r, err := http.NewRequestWithContext(ctx, req.Method(), u.String(), buf)
 	if err != nil {
 		return nil, err
 	}
@@ -278,11 +282,6 @@ func (c *Client) NewRequest(ctx context.Context, req Request) (*http.Request, er
 	// if err != nil {
 	// 	return nil, err
 	// }
-
-	// optionally pass along context
-	if ctx != nil {
-		r = r.WithContext(ctx)
-	}
 
 	// set other headers
 	r.Header.Add("Content-Type", fmt.Sprintf("%s; charset=%s", c.MediaType(), c.Charset()))

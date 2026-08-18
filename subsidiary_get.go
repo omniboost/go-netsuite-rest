@@ -1,6 +1,7 @@
 package netsuite
 
 import (
+	"context"
 	"net/http"
 	"net/url"
 
@@ -107,7 +108,12 @@ func (r *SubsidiaryGetRequest) NewResponseBody() *SubsidiaryGetResponseBody {
 	return &SubsidiaryGetResponseBody{}
 }
 
+// SubsidiaryGetResponseBody is the collection envelope the record endpoint
+// returns. Its items carry only the id and the links to each record, not the
+// record's fields: reading those needs a request per subsidiary, or a SuiteQL
+// query.
 type SubsidiaryGetResponseBody struct {
+	SubsidiaryCollection
 }
 
 func (r *SubsidiaryGetRequest) URL() (*url.URL, error) {
@@ -115,9 +121,9 @@ func (r *SubsidiaryGetRequest) URL() (*url.URL, error) {
 	return &u, err
 }
 
-func (r *SubsidiaryGetRequest) Do() (SubsidiaryGetResponseBody, error) {
+func (r *SubsidiaryGetRequest) Do(ctx context.Context) (SubsidiaryGetResponseBody, error) {
 	// Create http request
-	req, err := r.client.NewRequest(nil, r)
+	req, err := r.client.NewRequest(ctx, r)
 	if err != nil {
 		return *r.NewResponseBody(), err
 	}

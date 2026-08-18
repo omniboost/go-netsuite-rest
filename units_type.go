@@ -1,6 +1,7 @@
 package netsuite
 
 import (
+	"context"
 	"net/http"
 	"net/url"
 
@@ -108,18 +109,12 @@ func (r *UnitsTypeGetRequest) NewResponseBody() *UnitsTypeGetResponseBody {
 }
 
 type UnitsTypeGetResponseBody struct {
-	Links []struct {
-		Rel  string `json:"rel"`
-		Href string `json:"href"`
-	} `json:"links"`
-	Count   int  `json:"count"`
-	HasMore bool `json:"hasMore"`
+	Links   Links `json:"links"`
+	Count   int   `json:"count"`
+	HasMore bool  `json:"hasMore"`
 	Items   []struct {
-		Links []struct {
-			Rel  string `json:"rel"`
-			Href string `json:"href"`
-		} `json:"links"`
-		ID string `json:"id"`
+		Links Links  `json:"links"`
+		ID    string `json:"id"`
 	} `json:"items"`
 	Offset       int `json:"offset"`
 	TotalResults int `json:"totalResults"`
@@ -130,9 +125,9 @@ func (r *UnitsTypeGetRequest) URL() (*url.URL, error) {
 	return &u, err
 }
 
-func (r *UnitsTypeGetRequest) Do() (UnitsTypeGetResponseBody, error) {
+func (r *UnitsTypeGetRequest) Do(ctx context.Context) (UnitsTypeGetResponseBody, error) {
 	// Create http request
-	req, err := r.client.NewRequest(nil, r)
+	req, err := r.client.NewRequest(ctx, r)
 	if err != nil {
 		return *r.NewResponseBody(), err
 	}

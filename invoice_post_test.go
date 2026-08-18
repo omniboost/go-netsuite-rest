@@ -20,7 +20,7 @@ package netsuite_test
 // 			},
 // 		},
 // 	}
-// 	resp, err := req.Do()
+// 	resp, err := req.Do(context.Background())
 // 	if err != nil {
 // 		t.Error(err)
 // 	}

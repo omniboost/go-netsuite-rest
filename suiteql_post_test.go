@@ -1,6 +1,7 @@
 package netsuite_test
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -24,7 +25,7 @@ func TestSuiteqlPost(t *testing.T) {
 	// creditmemo
 	// invoice
 	// req.RequestBody().Q = "SELECT * FROM classification where name like '%196%'"
-	resp, err := req.Do()
+	resp, err := req.Do(context.Background())
 	if err != nil {
 		t.Error(err)
 	}
@@ -42,7 +43,7 @@ func TestSuiteqlPost(t *testing.T) {
 // 	req.RequestBody().Q = "SELECT * FROM customer where id IN(2607)"
 //
 // 	// req.RequestBody().Q = "SELECT * FROM classification where name like '%196%'"
-// 	resp, err := req.Do()
+// 	resp, err := req.Do(context.Background())
 // 	if err != nil {
 // 		t.Error(err)
 // 	}
@@ -63,7 +64,7 @@ func TestSuiteqlPostAddresses(t *testing.T) {
 	req.QueryParams().Limit = 12
 	req.RequestBody().Q = "SELECT * FROM EntityAddress where nkey IN (458404, 458304)"
 
-	resp, err := req.Do()
+	resp, err := req.Do(context.Background())
 	if err != nil {
 		t.Error(err)
 	}
@@ -83,7 +84,7 @@ func TestSuiteqlPostLocations(t *testing.T) {
 	req := client.NewSuiteqlPostRequest()
 	req.QueryParams().Limit = 100
 	req.RequestBody().Q = "SELECT * FROM location"
-	resp, err := req.Do()
+	resp, err := req.Do(context.Background())
 	if err != nil {
 		t.Error(err)
 	}
@@ -103,7 +104,7 @@ func TestSuiteqlPostCustomers(t *testing.T) {
 	req := client.NewSuiteqlPostRequest()
 	req.QueryParams().Limit = 100
 	req.RequestBody().Q = "SELECT * FROM customer"
-	resp, err := req.Do()
+	resp, err := req.Do(context.Background())
 	if err != nil {
 		t.Error(err)
 	}
@@ -123,7 +124,7 @@ func TestSuiteqlPostSalesTaxItems(t *testing.T) {
 	req := client.NewSuiteqlPostRequest()
 	req.QueryParams().Limit = 100
 	req.RequestBody().Q = "SELECT * FROM salestaxitem"
-	resp, err := req.Do()
+	resp, err := req.Do(context.Background())
 	if err != nil {
 		t.Error(err)
 	}
@@ -143,7 +144,7 @@ func TestSuiteqlPostNexus(t *testing.T) {
 	req := client.NewSuiteqlPostRequest()
 	req.QueryParams().Limit = 100
 	req.RequestBody().Q = "SELECT * FROM nexus where id IN('Netherlands')"
-	resp, err := req.Do()
+	resp, err := req.Do(context.Background())
 	if err != nil {
 		t.Error(err)
 	}

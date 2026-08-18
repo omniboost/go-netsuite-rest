@@ -1,6 +1,7 @@
 package netsuite
 
 import (
+	"context"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -121,9 +122,9 @@ func (r *CustomerGetRequest) URL() (*url.URL, error) {
 	return &u, err
 }
 
-func (r *CustomerGetRequest) Do() (CustomerGetResponseBody, error) {
+func (r *CustomerGetRequest) Do(ctx context.Context) (CustomerGetResponseBody, error) {
 	// Create http request
-	req, err := r.client.NewRequest(nil, r)
+	req, err := r.client.NewRequest(ctx, r)
 	if err != nil {
 		return *r.NewResponseBody(), err
 	}

@@ -1,6 +1,7 @@
 package netsuite
 
 import (
+	"context"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -121,9 +122,9 @@ func (r *StatisticalJournalEntryGetRequest) URL() (*url.URL, error) {
 	return &u, err
 }
 
-func (r *StatisticalJournalEntryGetRequest) Do() (StatisticalJournalEntryGetResponseBody, error) {
+func (r *StatisticalJournalEntryGetRequest) Do(ctx context.Context) (StatisticalJournalEntryGetResponseBody, error) {
 	// Create http request
-	req, err := r.client.NewRequest(nil, r)
+	req, err := r.client.NewRequest(ctx, r)
 	if err != nil {
 		return *r.NewResponseBody(), err
 	}
@@ -138,4 +139,3 @@ func (r *StatisticalJournalEntryGetRequest) Do() (StatisticalJournalEntryGetResp
 	_, err = r.client.Do(req, responseBody)
 	return *responseBody, err
 }
-

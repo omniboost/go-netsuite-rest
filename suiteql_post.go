@@ -2,6 +2,7 @@ package netsuite
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/url"
@@ -118,7 +119,7 @@ type SuiteqlPostResponseBody struct {
 	Links        Links           `json:"links"`
 	Count        int             `json:"count"`
 	HasMore      bool            `json:"hasMore"`
-	Items        json.RawMessage `json::"items"`
+	Items        json.RawMessage `json:"items"`
 	Offset       int             `json:"offset"`
 	TotalResults int             `json:"totalResults"`
 }
@@ -207,6 +208,18 @@ func (r *SuiteqlPostResponseBody) ToSuiteQLTransactions(client *Client) (SuiteQL
 	return items, err
 }
 
+func (r SuiteqlPostResponseBody) ToSubsidiaries(client *Client) (SQLSubsidiaries, error) {
+	subsidiaries := SQLSubsidiaries{}
+
+	reader := bytes.NewReader(r.Items)
+	dec := json.NewDecoder(reader)
+	if client.disallowUnknownFields {
+		dec.DisallowUnknownFields()
+	}
+	err := dec.Decode(&subsidiaries)
+	return subsidiaries, err
+}
+
 func (r SuiteqlPostResponseBody) ToNexuses(client *Client) (SQLNexuses, error) {
 	nexuses := SQLNexuses{}
 
@@ -236,9 +249,9 @@ func (r *SuiteqlPostRequest) URL() (*url.URL, error) {
 	return &u, err
 }
 
-func (r *SuiteqlPostRequest) Do() (SuiteqlPostResponseBody, error) {
+func (r *SuiteqlPostRequest) Do(ctx context.Context) (SuiteqlPostResponseBody, error) {
 	// Create http request
-	req, err := r.client.NewRequest(nil, r)
+	req, err := r.client.NewRequest(ctx, r)
 	if err != nil {
 		return *r.NewResponseBody(), err
 	}

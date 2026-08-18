@@ -13,8 +13,9 @@ func (l Links) IsEmpty() bool {
 }
 
 type Link struct {
-	Rel  string `json:"rel"`
-	Href string `json:"href"`
+	Rel    string `json:"rel"`
+	Href   string `json:"href"`
+	Method string `json:"method"`
 }
 
 func (l Link) IsZero() bool {

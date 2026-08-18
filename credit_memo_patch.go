@@ -1,6 +1,7 @@
 package netsuite
 
 import (
+	"context"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -120,9 +121,9 @@ func (r *CreditMemoPatchRequest) URL() (*url.URL, error) {
 	return &u, err
 }
 
-func (r *CreditMemoPatchRequest) Do() (CreditMemoPatchResponseBody, error) {
+func (r *CreditMemoPatchRequest) Do(ctx context.Context) (CreditMemoPatchResponseBody, error) {
 	// Create http request
-	req, err := r.client.NewRequest(nil, r)
+	req, err := r.client.NewRequest(ctx, r)
 	if err != nil {
 		return *r.NewResponseBody(), err
 	}
@@ -137,4 +138,3 @@ func (r *CreditMemoPatchRequest) Do() (CreditMemoPatchResponseBody, error) {
 	_, err = r.client.Do(req, responseBody)
 	return *responseBody, err
 }
-

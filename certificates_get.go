@@ -1,6 +1,7 @@
 package netsuite
 
 import (
+	"context"
 	"net/http"
 	"net/url"
 
@@ -117,9 +118,9 @@ func (r *CertificatesGetRequest) URL() (*url.URL, error) {
 	return &u, err
 }
 
-func (r *CertificatesGetRequest) Do() (CertificatesGetResponseBody, error) {
+func (r *CertificatesGetRequest) Do(ctx context.Context) (CertificatesGetResponseBody, error) {
 	// Create http request
-	req, err := r.client.NewRequest(nil, r)
+	req, err := r.client.NewRequest(ctx, r)
 	if err != nil {
 		return *r.NewResponseBody(), err
 	}

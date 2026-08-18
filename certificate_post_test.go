@@ -1,6 +1,7 @@
 package netsuite_test
 
 import (
+	"context"
 	"encoding/json"
 	"log"
 	"testing"
@@ -46,7 +47,7 @@ PYFlePnID9V7E45/asnuES7L+5mxnk/D5FJwlh8fSFN9l3NdhA==
 	req.RequestBody().Role = 1073
 	req.RequestBody().Entity = 1651
 
-	resp, err := req.Do()
+	resp, err := req.Do(context.Background())
 	if err != nil {
 		t.Error(err)
 	}

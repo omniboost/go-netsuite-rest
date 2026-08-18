@@ -1,5 +1,27 @@
 package netsuite
 
+type SQLSubsidiaries []SQLSubsidiary
+
+// SQLSubsidiary is a row of the SuiteQL subsidiary table. SuiteQL names the
+// columns as they are spelled in the table, in lower case, rather than in the
+// camel case the record endpoints use, so the tags here read "isinactive" where
+// Subsidiary reads "isInactive". A column that is null for a row is left out of
+// the response entirely, which is why every field is omitempty: the root
+// subsidiary carries no parent.
+type SQLSubsidiary struct {
+	ID            string `json:"id,omitempty"`
+	Name          string `json:"name,omitempty"`
+	FullName      string `json:"fullname,omitempty"`
+	LegalName     string `json:"legalname,omitempty"`
+	Parent        string `json:"parent,omitempty"`
+	Country       string `json:"country,omitempty"`
+	Currency      string `json:"currency,omitempty"`
+	TranPrefix    string `json:"tranprefix,omitempty"`
+	IsInactive    Bool   `json:"isinactive,omitempty"`
+	IsElimination Bool   `json:"iselimination,omitempty"`
+	Links         Links  `json:"links,omitempty"`
+}
+
 type SQLNexuses []SQLNexus
 
 type SQLNexus struct {

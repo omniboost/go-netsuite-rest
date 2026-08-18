@@ -1,6 +1,7 @@
 package netsuite
 
 import (
+	"context"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -121,9 +122,9 @@ func (r *LocationGetRequest) URL() (*url.URL, error) {
 	return &u, err
 }
 
-func (r *LocationGetRequest) Do() (LocationGetResponseBody, error) {
+func (r *LocationGetRequest) Do(ctx context.Context) (LocationGetResponseBody, error) {
 	// Create http request
-	req, err := r.client.NewRequest(nil, r)
+	req, err := r.client.NewRequest(ctx, r)
 	if err != nil {
 		return *r.NewResponseBody(), err
 	}

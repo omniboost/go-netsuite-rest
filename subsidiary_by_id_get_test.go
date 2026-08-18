@@ -1,6 +1,7 @@
 package netsuite_test
 
 import (
+	"context"
 	"encoding/json"
 	"log"
 	"testing"
@@ -12,7 +13,7 @@ func TestSubsidiaryByIDGet(t *testing.T) {
 	req.QueryParams().ExpandSubResources = true
 	client.SetDisallowUnknownFields(false)
 
-	resp, err := req.Do()
+	resp, err := req.Do(context.Background())
 	if err != nil {
 		t.Error(err)
 	}

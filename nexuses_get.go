@@ -1,6 +1,7 @@
 package netsuite
 
 import (
+	"context"
 	"net/http"
 	"net/url"
 
@@ -114,9 +115,9 @@ func (r *NexusesGetRequest) URL() (*url.URL, error) {
 	return &u, err
 }
 
-func (r *NexusesGetRequest) Do() (NexusesGetResponseBody, error) {
+func (r *NexusesGetRequest) Do(ctx context.Context) (NexusesGetResponseBody, error) {
 	// Create http request
-	req, err := r.client.NewRequest(nil, r)
+	req, err := r.client.NewRequest(ctx, r)
 	if err != nil {
 		return *r.NewResponseBody(), err
 	}
@@ -131,4 +132,3 @@ func (r *NexusesGetRequest) Do() (NexusesGetResponseBody, error) {
 	_, err = r.client.Do(req, responseBody)
 	return *responseBody, err
 }
-
