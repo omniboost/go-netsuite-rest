@@ -97,6 +97,15 @@ func (r SuiteqlPostRequest) NewRequestBody() SuiteqlPostRequestBody {
 
 type SuiteqlPostRequestBody struct {
 	Q string `json:"q"`
+	// Params supplies the value for each ? placeholder in Q, positionally: the
+	// first element binds to the first ?, and so on. NetSuite substitutes them
+	// at execution time rather than as text of the query itself, which is what
+	// makes them safe to build from input the query's own text should not -
+	// see "Executing SuiteQL Queries Through REST Web Services" in NetSuite's
+	// own documentation for the bound-parameter feature this maps onto.
+	// Omitted entirely, not sent as an empty array, when Q has no placeholder
+	// of its own.
+	Params []string `json:"params,omitempty"`
 }
 
 func (r *SuiteqlPostRequest) RequestBody() *SuiteqlPostRequestBody {
