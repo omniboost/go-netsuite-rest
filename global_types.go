@@ -16,6 +16,10 @@ type Link struct {
 	Rel    string `json:"rel"`
 	Href   string `json:"href"`
 	Method string `json:"method"`
+	// MediaType is set on the links the metadata catalog hands out, where
+	// one href serves several representations and the media type is what
+	// tells them apart.
+	MediaType string `json:"mediaType,omitempty"`
 }
 
 func (l Link) IsZero() bool {
