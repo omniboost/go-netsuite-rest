@@ -493,10 +493,20 @@ func (d *ErrorDetail) Error() string {
 	return ""
 }
 
+// responseContentTypes are the media types a NetSuite response body may
+// carry and still be JSON this client can decode: plain JSON, Oracle's
+// resource envelope the record endpoints answer with, and the JSON schema the
+// metadata catalog describes a record type in.
+var responseContentTypes = map[string]bool{
+	"application/json":                     true,
+	"application/vnd.oracle.resource+json": true,
+	"application/schema+json":              true,
+}
+
 func checkContentType(response *http.Response) error {
 	header := response.Header.Get("Content-Type")
 	contentType := strings.Split(header, ";")[0]
-	if contentType != "application/json" && contentType != "application/vnd.oracle.resource+json" {
+	if !responseContentTypes[contentType] {
 		return fmt.Errorf("Expected Content-Type \"%s\", got \"%s\"", mediaType, contentType)
 	}
 
